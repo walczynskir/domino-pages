@@ -349,6 +349,10 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   display: flex;
   flex-direction: column;
 }
+.board-frame .table {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
 .board-toolbar {
   display: flex;
   align-items: flex-start;
@@ -361,7 +365,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   gap: 3px;
   padding: 1px 4px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0 0 8px 8px;
   background: var(--table, var(--wash));
 }
 .board-toolbar .board-zoom-controls button {
@@ -375,7 +379,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   min-width: 0;
   padding: 4px 8px;
   background: var(--wash);
-  border-radius: 8px;
+  border-radius: 0 0 8px 8px;
 }
 .game .status-bar #status {
   margin: 0;
