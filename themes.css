@@ -357,7 +357,6 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   display: flex;
   align-items: flex-start;
   gap: 6px;
-  margin-top: 6px;
 }
 .board-toolbar .board-zoom-controls {
   display: flex;
