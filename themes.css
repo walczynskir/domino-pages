@@ -334,14 +334,14 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 
 /* Reward themes */
 :root[data-theme="copper"] {
-  --bg:#faf1e7; --ink:#432d24; --muted:#705247; --accent:#934826;
-  --line:#e1c7b6; --wash:#f7dfcf; --paper:#fffaf4; --table:var(--bg);
-  --radius:24px; --control-radius:999px; --primary-bg:#934826; --primary-ink:#fff;
+  --bg:var(--palette-bg); --ink:var(--palette-ink); --muted:var(--palette-muted); --accent:var(--palette-accent);
+  --line:var(--palette-line); --wash:var(--palette-wash); --paper:var(--palette-paper); --table:var(--bg);
+  --radius:24px; --control-radius:999px; --primary-bg:var(--palette-primary-bg); --primary-ink:var(--palette-primary-ink);
 }
 :root[data-theme="night-sky"] {
-  --bg:#161c2c; --ink:#f0f2ff; --muted:#b5bfd8; --accent:#b4bfff;
-  --line:#465172; --wash:#2f3a58; --paper:#222b42; --table:var(--bg);
-  --radius:24px; --control-radius:999px; --primary-bg:#aebaff; --primary-ink:#182139;
+  --bg:var(--palette-bg); --ink:var(--palette-ink); --muted:var(--palette-muted); --accent:var(--palette-accent);
+  --line:var(--palette-line); --wash:var(--palette-wash); --paper:var(--palette-paper); --table:var(--bg);
+  --radius:24px; --control-radius:999px; --primary-bg:var(--palette-primary-bg); --primary-ink:var(--palette-primary-ink);
 }
 
 

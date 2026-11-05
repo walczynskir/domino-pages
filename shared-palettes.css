@@ -1,0 +1,23 @@
+/* Canonical shared palette. Copy this file unchanged to Sudoku dist/. */
+:root[data-theme="copper"] {
+  --palette-bg: #faf1e7;
+  --palette-ink: #432d24;
+  --palette-muted: #705247;
+  --palette-accent: #934826;
+  --palette-line: #e1c7b6;
+  --palette-wash: #f7dfcf;
+  --palette-paper: #fffaf4;
+  --palette-primary-bg: #934826;
+  --palette-primary-ink: #fff;
+}
+:root[data-theme="night-sky"] {
+  --palette-bg: #161c2c;
+  --palette-ink: #f0f2ff;
+  --palette-muted: #b5bfd8;
+  --palette-accent: #b4bfff;
+  --palette-line: #465172;
+  --palette-wash: #2f3a58;
+  --palette-paper: #222b42;
+  --palette-primary-bg: #aebaff;
+  --palette-primary-ink: #182139;
+}
