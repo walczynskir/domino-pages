@@ -69,7 +69,7 @@ button:not(.tile),select{border-radius:var(--control-radius)}
 .tile.last-played{outline:3px solid var(--accent);outline-offset:2px;box-shadow:0 0 0 5px var(--paper)}
 [data-theme="contrast"] .tile.last-played{outline:4px double #111;outline-offset:2px}
 .last-move{margin:12px 0 0;padding:9px 12px;border-inline-start:3px solid var(--accent);font-size:12px;color:var(--ink);background:var(--paper)}
-.last-move+#status{margin-top:8px}
+
 
 /* The main table always fits the complete board. The magnifier shows detail. */
 .table{position:relative;display:block;height:clamp(240px,42vh,380px);min-height:240px;max-height:none;overflow:hidden;padding:0}
@@ -146,7 +146,7 @@ header .preferences select{width:100%;max-width:none;min-width:0;min-height:44px
  .game .board-caption{margin-top:4px;font-size:10px;gap:4px}
  .game .pool-tray{margin-top:5px;gap:5px}
  .game .last-move{font-size:11px;line-height:1.3;padding:4px 7px;margin-top:5px}
- .game #status{font-size:12px;line-height:1.3;padding:6px 8px;margin:5px 0}
+ .game #status{font-size:12px;line-height:1.3}
  .game #choices{margin-bottom:5px;gap:5px}
  .game .move-choice{padding:5px;gap:5px}
  .game .move-choice button{padding:5px 10px;min-height:36px}
@@ -209,7 +209,6 @@ select option:checked{background:var(--accent);color:#fff}
 #help #demo-scene{min-height:180px;padding:12px;gap:10px}
 #help details{font-size:13px;margin-top:12px}
 #help summary{cursor:pointer;font-weight:700}
-.board-zoom-controls{display:flex;justify-content:flex-end;gap:4px;margin:4px 0}
 .board-zoom-controls button{min-height:32px;padding:3px 10px;font-size:14px;line-height:1.3}
 #zoom-reset{min-width:64px;font-variant-numeric:tabular-nums}
 .drop-actions{display:grid;gap:10px}
@@ -217,7 +216,6 @@ select option:checked{background:var(--accent);color:#fff}
 
 .table.zoomed #board .tile.legal-end{cursor:pointer}
 
-.board-zoom-controls{width:fit-content;display:flex;gap:2px;margin:5px 0 5px auto;padding:2px;border:1px solid var(--line);border-radius:999px;background:var(--paper);box-shadow:0 1px 5px #0002}
 .board-zoom-controls button{width:36px;height:36px;min-height:36px;padding:0;font-size:21px;line-height:1;border-radius:50%}
 
 /* Footer follows the shared Sudoku layout. */
@@ -344,4 +342,32 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   --bg:#161c2c; --ink:#f0f2ff; --muted:#b5bfd8; --accent:#b4bfff;
   --line:#465172; --wash:#2f3a58; --paper:#222b42; --table:var(--bg);
   --radius:24px; --control-radius:999px; --primary-bg:#aebaff; --primary-ink:#182139;
+}
+
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  padding: 4px 6px 4px 10px;
+  background: var(--wash);
+  border-radius: 8px;
+}
+.game .status-bar #status {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
+  overflow-wrap: anywhere;
+}
+.status-bar .board-zoom-controls {
+  display: flex;
+  flex: none;
+  gap: 4px;
+  order: 1;
+}
+[dir="rtl"] .status-bar .board-zoom-controls {
+  order: -1;
 }
