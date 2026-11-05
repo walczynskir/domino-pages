@@ -217,7 +217,7 @@ select option:checked{background:var(--accent);color:#fff}
 
 .table.zoomed #board .tile.legal-end{cursor:pointer}
 
-.board-zoom-controls{position:absolute;right:8px;bottom:8px;z-index:5;display:flex;gap:2px;margin:0;padding:2px;border:1px solid var(--line);border-radius:999px;background:var(--paper);box-shadow:0 1px 5px #0002}
+.board-zoom-controls{width:fit-content;display:flex;gap:2px;margin:5px 0 5px auto;padding:2px;border:1px solid var(--line);border-radius:999px;background:var(--paper);box-shadow:0 1px 5px #0002}
 .board-zoom-controls button{width:36px;height:36px;min-height:36px;padding:0;font-size:21px;line-height:1;border-radius:50%}
 
 /* Footer follows the shared Sudoku layout. */
@@ -237,7 +237,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 @media(max-width:540px){footer{gap:12px;padding:18px 16px 28px}.support-links{gap:8px 16px!important}}
 
 /* Compact mobile zoom, unchanged desktop size. */
-@media(max-width:540px){.board-zoom-controls{right:6px;bottom:6px}.board-zoom-controls button{width:28px;height:28px;min-height:28px;font-size:17px}.large .board-zoom-controls button{font-size:19px}}
+@media(max-width:540px){.board-zoom-controls button{width:28px;height:28px;min-height:28px;font-size:17px}.large .board-zoom-controls button{font-size:19px}}
 #computer-draw{display:table;margin:3px auto 6px;padding:4px 10px;border:1px solid var(--accent);border-radius:var(--radius);background:var(--wash);color:var(--ink);font-size:12px;font-weight:700}
 .computer-drawn{outline:2px solid var(--accent);outline-offset:2px}
 
@@ -307,7 +307,6 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 .game-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;margin-bottom:10px}
 .game-tools{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;margin-inline-start:auto}
 .game-toolbar button{white-space:nowrap}
-.game-toolbar #settings-button{width:44px;min-width:44px;min-height:44px;padding:8px;font-size:22px;line-height:1}
 @media(max-width:540px){.game-toolbar{gap:8px 12px}.game-toolbar button{font-size:12px;padding:8px 12px}.game-tools{gap:5px}}
 
 /* A non-playable tile is still a visible object, especially the blank double. */
@@ -333,3 +332,16 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 [data-theme="contrast"] .game #opponent-hand .back,[data-theme="contrast"] .game .pool-back{border-color:#111;background:repeating-linear-gradient(45deg,#fff,#fff 4px,#bbb 4px,#bbb 6px);box-shadow:none}
 
 .game #hand{display:block}.player-row{display:flex;justify-content:center;gap:6px;margin:0 0 6px}.player-row:last-child{margin-bottom:0}
+
+
+/* Reward themes */
+:root[data-theme="copper"] {
+  --bg:#faf1e7; --ink:#432d24; --muted:#705247; --accent:#934826;
+  --line:#e1c7b6; --wash:#f7dfcf; --paper:#fffaf4; --table:var(--bg);
+  --radius:24px; --control-radius:999px; --primary-bg:#934826; --primary-ink:#fff;
+}
+:root[data-theme="night-sky"] {
+  --bg:#161c2c; --ink:#f0f2ff; --muted:#b5bfd8; --accent:#b4bfff;
+  --line:#465172; --wash:#2f3a58; --paper:#222b42; --table:var(--bg);
+  --radius:24px; --control-radius:999px; --primary-bg:#aebaff; --primary-ink:#182139;
+}
