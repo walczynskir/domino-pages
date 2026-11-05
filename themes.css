@@ -366,6 +366,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   border: 1px solid var(--line);
   border-top: 0;
   margin-top: -1px;
+  position: relative;
   border-radius: 0 0 8px 8px;
   background: var(--table, var(--wash));
 }
