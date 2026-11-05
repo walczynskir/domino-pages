@@ -349,22 +349,33 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   display: flex;
   flex-direction: column;
 }
-.board-frame .board-zoom-controls {
-  align-self: flex-end;
+.board-toolbar {
   display: flex;
-  gap: 4px;
-  padding: 3px 6px;
-  margin-inline: 8px;
+  align-items: flex-start;
+  gap: 6px;
+}
+.board-toolbar .board-zoom-controls {
+  display: flex;
+  flex: none;
+  gap: 3px;
+  padding: 0 4px 2px;
   border: 1px solid var(--line);
   border-top: 0;
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 0 8px 8px;
   background: var(--table, var(--wash));
 }
+.board-toolbar .board-zoom-controls button {
+  width: 26px;
+  height: 26px;
+  min-height: 26px;
+  font-size: 16px;
+}
 .status-bar {
-  margin: 8px 0;
-  padding: 4px 10px;
+  flex: 1;
+  min-width: 0;
+  padding: 4px 8px;
   background: var(--wash);
-  border-radius: 8px;
+  border-radius: 0 0 8px 8px;
 }
 .game .status-bar #status {
   margin: 0;
