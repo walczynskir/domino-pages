@@ -345,29 +345,30 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 }
 
 
-.status-bar {
+.board-frame {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+}
+.board-frame .board-zoom-controls {
+  align-self: flex-end;
+  display: flex;
+  gap: 4px;
+  padding: 3px 6px;
+  margin-inline: 8px;
+  border: 1px solid var(--line);
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  background: var(--table, var(--wash));
+}
+.status-bar {
   margin: 8px 0;
-  padding: 4px 6px 4px 10px;
+  padding: 4px 10px;
   background: var(--wash);
   border-radius: 8px;
 }
 .game .status-bar #status {
-  flex: 1;
-  min-width: 0;
   margin: 0;
   padding: 0;
   background: none;
   overflow-wrap: anywhere;
-}
-.status-bar .board-zoom-controls {
-  display: flex;
-  flex: none;
-  gap: 4px;
-  order: 1;
-}
-[dir="rtl"] .status-bar .board-zoom-controls {
-  order: -1;
 }
