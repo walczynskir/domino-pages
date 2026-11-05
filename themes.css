@@ -307,7 +307,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 .game-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;margin-bottom:10px}
 .game-tools{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;margin-inline-start:auto}
 .game-toolbar button{white-space:nowrap}
-.game-toolbar #settings-button{width:42px;min-width:42px;padding:8px}
+.game-toolbar #settings-button{width:44px;min-width:44px;min-height:44px;padding:8px;font-size:22px;line-height:1}
 @media(max-width:540px){.game-toolbar{gap:8px 12px}.game-toolbar button{font-size:12px;padding:8px 12px}.game-tools{gap:5px}}
 
 /* A non-playable tile is still a visible object, especially the blank double. */
