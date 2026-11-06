@@ -404,3 +404,11 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     height: clamp(220px, calc(100svh - 575px), 360px);
   }
 }
+
+#difficulty-note ul {
+  margin: 0;
+  padding-inline-start: 18px;
+}
+#difficulty-note li + li {
+  margin-top: 5px;
+}
