@@ -389,3 +389,12 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   background: none;
   overflow-wrap: anywhere;
 }
+
+@media (min-width: 1200px) {
+  main {
+    max-width: 1480px;
+  }
+  .game .table {
+    height: clamp(280px, calc(100svh - 460px), 440px);
+  }
+}
