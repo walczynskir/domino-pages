@@ -150,7 +150,47 @@
     if (!s.board && s.settings.openingDoublesOnly !== false && tile.a !== tile.b) return 0;
     return E.endPoints(values(place(copyBoard(s.board), tile, arm)));
   }
+  function searchRound(s, player, depth, alpha, beta, budget) {
+    const opponent = 1 - player;
+    const score = s.scores[player] - s.scores[opponent];
+    if (s.matchWinner !== null) return score + (s.matchWinner === player ? 300 : -300);
+    if (s.roundResult) return score;
+    if (depth === 0 || --budget.left <= 0) {
+      return score + (s.hands[opponent].length - s.hands[player].length) * 2
+        + (E.sum(s.hands[opponent]) - E.sum(s.hands[player])) * 0.15;
+    }
+    const moves = legal(s);
+    if (!moves.length) {
+      const trial = { ...s, hands: s.hands.slice(), scores: s.scores.slice(), events: [] };
+      while (trial.pool.length > 2) {
+        const result = draw(trial);
+        if (trial.roundResult || result.pass) return searchRound(trial, player, depth - 1, alpha, beta, budget);
+        if (result.mustPlay) return searchRound(trial, player, depth, alpha, beta, budget);
+      }
+      pass(trial);
+      return searchRound(trial, player, depth - 1, alpha, beta, budget);
+    }
+    const maximizing = s.turn === player;
+    let best = maximizing ? -Infinity : Infinity;
+    for (const move of moves) {
+      const tile = s.hands[s.turn].find(tile => tile.id === move.id);
+      const trial = { ...s, hands: s.hands.map(hand => hand.slice()), scores: s.scores.slice(), board: copyBoard(s.board), events: [] };
+      play(trial, move.id, move.arm, movePoints(s, tile, move.arm) > 0);
+      const value = searchRound(trial, player, depth - 1, alpha, beta, budget);
+      if (maximizing) {
+        best = Math.max(best, value);
+        alpha = Math.max(alpha, best);
+      } else {
+        best = Math.min(best, value);
+        beta = Math.min(beta, best);
+      }
+      if (alpha >= beta || budget.left <= 0) break;
+    }
+    return best;
+  }
+
   function expert(s, moves, random) {
+    const grandmaster = s.settings.aiDifficulty === 'grandmaster';
     const player = s.turn, opponent = 1 - player;
     const hand = s.hands[player], opponentCount = s.hands[opponent].length;
     const seen = new Set([...hand, ...(s.board ? [s.board.root, ...s.board.arms.flat()] : [])].map(tile => tile.id));
@@ -169,21 +209,28 @@
     // may have introduced such tiles. Older saves simply lack this evidence.
     const evidence = [];
     let drawn = 0;
-    for (const event of (s.events || []).slice().reverse()) {
+    const events = s.events || [];
+    for (let index = events.length - 1; index >= 0; index--) {
+      const event = events[index];
       if (event.player !== opponent) continue;
-      drawn += event.drawn || 0;
+      // A playable draw is immediately played, so it cannot be in the current hand.
+      const next = events[index + 1];
+      if (!(grandmaster && next?.player === opponent && next.id)) drawn += event.drawn || 0;
       if (event.ends?.length) evidence.push({ ends: event.ends, drawn });
     }
     const samples = [];
-    for (let attempt = 0; attempt < 80 && samples.length < 16; attempt++) {
+    const sampleCount = grandmaster ? 40 : 16;
+    for (let attempt = 0; attempt < sampleCount * 5 && samples.length < sampleCount; attempt++) {
       const bag = E.shuffle(unseen, random);
       const otherHand = bag.slice(0, opponentCount);
       if (evidence.every(({ ends, drawn }) => otherHand.filter(tile => E.fits(tile, ends)).length <= drawn)) samples.push(bag);
     }
-    while (samples.length < 16) samples.push(E.shuffle(unseen, random));
+    while (samples.length < sampleCount) samples.push(E.shuffle(unseen, random));
 
-    for (const move of candidates) {
-      for (const bag of samples) {
+    const depth = s.pool.length <= 2 ? Math.min(10, hand.length + opponentCount + 2) : 2;
+    const deadline = grandmaster ? performance.now() + 45 : Infinity;
+    for (const bag of samples) {
+      for (const move of candidates) {
         const hands = [];
         hands[player] = hand.slice();
         hands[opponent] = bag.slice(0, opponentCount);
@@ -193,6 +240,10 @@
           settings: { ...s.settings, aiDifficulty: 'hard' }
         };
         play(trial, move.id, move.arm, move.points > 0);
+        if (grandmaster) {
+          move.rank += searchRound(trial, player, depth, -Infinity, Infinity, { left: 240 });
+          continue;
+        }
         for (let replies = 0; replies < 2 && !trial.roundResult && trial.matchWinner === null; replies++) {
           let reply = choose(trial, () => 0);
           let passed = false;
@@ -210,6 +261,7 @@
         const mobility = new Set(legal(trial, player).map(move => move.id)).size;
         move.rank += points + terminal + mobility * 1.25 + (hands[opponent].length - hands[player].length) * 1.5 - E.sum(hands[player]) * 0.12;
       }
+      if (grandmaster && performance.now() >= deadline) break;
     }
     const best = candidates.sort((a, b) => b.rank - a.rank)[0];
     return { ...best, declared: best.points > 0 };
@@ -217,7 +269,7 @@
   function choose(s, random = Math.random) {
     // Only the public board, scores and the current player's hand influence choice.
     const moves = legal(s);
-    if (moves.length && s.settings.aiDifficulty === 'expert') return expert(s, moves, random);
+    if (moves.length && ['expert', 'grandmaster'].includes(s.settings.aiDifficulty)) return expert(s, moves, random);
     return moves.map(move => {
       const item = s.hands[s.turn].find(t => t.id === move.id);
       const points = movePoints(s, item, move.arm);
