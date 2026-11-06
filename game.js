@@ -113,14 +113,15 @@
   function draw(s) {
     if (!s.board || s.roundResult || s.matchWinner !== null) throw new Error('Cannot draw');
     const player = s.turn;
-    const result = E.draw(s.hands[player], s.pool, ports(s.board).map(arm => tip(s.board, arm)), 1);
+    const ends = ports(s.board).map(arm => tip(s.board, arm));
+    const result = E.draw(s.hands[player], s.pool, ends, 1);
     s.drawnThisTurn = (s.drawnThisTurn || 0) + result.drawn.length;
     s.lastDrawn ||= [null,null];
     if (result.drawn.length) s.lastDrawn[player] = result.drawn[0].id;
     result.pass = !result.mustPlay && (s.drawnThisTurn >= 2 || result.pool.length <= 2);
     s.hands[s.turn] = result.hand; s.pool = result.pool; s.forced = result.mustPlay;
     s.lastPoints = 0;
-    s.events.push({ player: s.turn, drawn: result.drawn.length, pass: result.pass });
+    s.events.push({ player: s.turn, drawn: result.drawn.length, pass: result.pass, ends });
     if (result.pass) { s.turn = 1 - s.turn; s.drawnThisTurn = 0; }
     detectBlock(s);
     return result;
@@ -133,7 +134,7 @@
   function pass(s) {
     if (!s.board || s.roundResult || s.matchWinner !== null || legal(s).length) throw new Error('Cannot pass');
     if (s.pool.length > 2 && s.settings.mustDraw !== false) throw new Error('Must draw before passing');
-    s.events.push({ player: s.turn, drawn: 0, pass: true });
+    s.events.push({ player: s.turn, drawn: 0, pass: true, ends: ports(s.board).map(arm => tip(s.board, arm)) });
     s.lastPoints = 0; s.drawnThisTurn = 0; s.turn = 1 - s.turn;
     detectBlock(s);
     return s;
@@ -142,13 +143,84 @@
     if (s.matchWinner === null) throw new Error('Match still active');
     return create(random, 1 - s.matchWinner, s.settings);
   }
+  function copyBoard(board) {
+    return board && { ...board, arms: board.arms.map(arm => arm.slice()) };
+  }
+  function movePoints(s, tile, arm) {
+    if (!s.board && s.settings.openingDoublesOnly !== false && tile.a !== tile.b) return 0;
+    return E.endPoints(values(place(copyBoard(s.board), tile, arm)));
+  }
+  function expert(s, moves, random) {
+    const player = s.turn, opponent = 1 - player;
+    const hand = s.hands[player], opponentCount = s.hands[opponent].length;
+    const seen = new Set([...hand, ...(s.board ? [s.board.root, ...s.board.arms.flat()] : [])].map(tile => tile.id));
+    const unseen = E.deck().filter(tile => !seen.has(tile.id));
+    const candidates = moves.map(move => {
+      const tile = hand.find(tile => tile.id === move.id);
+      return { ...move, points: movePoints(s, tile, move.arm), rank: 0 };
+    });
+    const immediate = candidates.find(move => s.scores[player] + move.points >= 150);
+    if (immediate || candidates.length === 1) {
+      const move = immediate || candidates[0];
+      return { ...move, declared: move.points > 0 };
+    }
+
+    // A draw or pass proves the old hand had no matching tile. Later draws
+    // may have introduced such tiles. Older saves simply lack this evidence.
+    const evidence = [];
+    let drawn = 0;
+    for (const event of (s.events || []).slice().reverse()) {
+      if (event.player !== opponent) continue;
+      drawn += event.drawn || 0;
+      if (event.ends?.length) evidence.push({ ends: event.ends, drawn });
+    }
+    const samples = [];
+    for (let attempt = 0; attempt < 80 && samples.length < 16; attempt++) {
+      const bag = E.shuffle(unseen, random);
+      const otherHand = bag.slice(0, opponentCount);
+      if (evidence.every(({ ends, drawn }) => otherHand.filter(tile => E.fits(tile, ends)).length <= drawn)) samples.push(bag);
+    }
+    while (samples.length < 16) samples.push(E.shuffle(unseen, random));
+
+    for (const move of candidates) {
+      for (const bag of samples) {
+        const hands = [];
+        hands[player] = hand.slice();
+        hands[opponent] = bag.slice(0, opponentCount);
+        const trial = {
+          hands, pool: bag.slice(opponentCount), board: copyBoard(s.board), scores: s.scores.slice(),
+          turn: player, forced: s.forced, roundResult: null, matchWinner: null, events: [],
+          settings: { ...s.settings, aiDifficulty: 'hard' }
+        };
+        play(trial, move.id, move.arm, move.points > 0);
+        for (let replies = 0; replies < 2 && !trial.roundResult && trial.matchWinner === null; replies++) {
+          let reply = choose(trial, () => 0);
+          let passed = false;
+          while (!reply && trial.pool.length > 2) {
+            const result = draw(trial);
+            passed = result.pass;
+            if (passed || trial.roundResult) break;
+            reply = choose(trial, () => 0);
+          }
+          if (reply) play(trial, reply.id, reply.arm, reply.declared);
+          else if (!trial.roundResult && !passed) pass(trial);
+        }
+        const points = (trial.scores[player] - s.scores[player]) - (trial.scores[opponent] - s.scores[opponent]);
+        const terminal = trial.matchWinner === null ? 0 : trial.matchWinner === player ? 150 : -150;
+        const mobility = new Set(legal(trial, player).map(move => move.id)).size;
+        move.rank += points + terminal + mobility * 1.25 + (hands[opponent].length - hands[player].length) * 1.5 - E.sum(hands[player]) * 0.12;
+      }
+    }
+    const best = candidates.sort((a, b) => b.rank - a.rank)[0];
+    return { ...best, declared: best.points > 0 };
+  }
   function choose(s, random = Math.random) {
     // Only the public board, scores and the current player's hand influence choice.
     const moves = legal(s);
+    if (moves.length && s.settings.aiDifficulty === 'expert') return expert(s, moves, random);
     return moves.map(move => {
       const item = s.hands[s.turn].find(t => t.id === move.id);
-      const board = place(s.board ? structuredClone(s.board) : null, item, move.arm);
-      const points = !s.board && s.settings.openingDoublesOnly !== false && item.a !== item.b ? 0 : E.endPoints(values(board));
+      const points = movePoints(s, item, move.arm);
       const level = s.settings.aiDifficulty || 'medium';
       const noise = random();
       const rank = level === 'easy' ? noise : level === 'hard' ? points * 5 + item.a + item.b + noise : points * 2 + item.a + item.b + noise * 20;
