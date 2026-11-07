@@ -1,0 +1,8 @@
+.games-chest-menu { position: relative; display: inline-block; }
+.games-chest-menu summary { cursor: pointer; padding: .35em .65em; border: 1px solid currentColor; border-radius: .5em; }
+.games-chest-menu ul {
+  position: absolute; inset-inline-start: 0; z-index: 20;
+  min-width: max-content; list-style: none; margin: .3em 0 0; padding: .25em;
+  background: Canvas; color: CanvasText; border: 1px solid currentColor; border-radius: .5em;
+}
+.games-chest-menu a { display: block; color: inherit; padding: .3em .6em; }
