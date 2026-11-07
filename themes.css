@@ -556,3 +556,15 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   border-radius: 6px;
   padding-inline: 4px;
 }
+
+.placement-target.placement-declare {
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+  font-size: 13px;
+}
+@media (width < 851px), (hover: none), (pointer: coarse) {
+  .placement-target.placement-declare {
+    display: none;
+  }
+}
