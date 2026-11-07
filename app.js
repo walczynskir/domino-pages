@@ -512,6 +512,7 @@
     const label = open ? 'Exit full screen' : 'Full screen';
     fullscreenButton.setAttribute('aria-label', label);
     fullscreenButton.title = label;
+    fullscreenButton.querySelector('.fullscreen-label').textContent = label;
     DominoI18n.apply(fullscreenButton, prefs.language);
     window.scrollTo(0, open ? 0 : gameScrollY);
   }

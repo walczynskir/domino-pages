@@ -17,3 +17,10 @@ button.shared-settings-button::before {
   -webkit-mask: var(--gear) center / contain no-repeat;
   mask: var(--gear) center / contain no-repeat;
 }
+/* Keep the full screen control readable on desktop and compact on phones. */
+#fullscreen { min-width: 44px; min-height: 44px; font-size: inherit; }
+#fullscreen .fullscreen-icon { display: none; font-size: 1.25rem; }
+@media (max-width: 40rem) {
+  #fullscreen .fullscreen-icon { display: inline; }
+  #fullscreen .fullscreen-label { display: none; }
+}
