@@ -1,0 +1,41 @@
+.shared-victory {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+.shared-victory-caption {
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  max-inline-size: 85vw;
+  padding: 12px 22px;
+  border: 2px solid #8b5300;
+  border-radius: 16px;
+  background: #fff8df;
+  color: #352400;
+  font: 700 clamp(18px, 4vw, 28px)/1.2 system-ui, sans-serif;
+  text-align: center;
+  box-shadow: 0 6px 24px #20140035;
+}
+.shared-victory-caption svg { width: 68px; height: 68px; }
+.shared-victory > i {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 7px;
+  height: 11px;
+  opacity: 0;
+  animation: shared-confetti 1.45s ease-out both;
+}
+@keyframes shared-confetti {
+  0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  68% { opacity: 1; }
+  100% { transform: translate(var(--x), calc(var(--y) + 40px)) rotate(var(--spin)); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shared-victory > i { display: none; }
+}

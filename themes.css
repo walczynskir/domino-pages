@@ -412,3 +412,137 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 #difficulty-note li + li {
   margin-top: 5px;
 }
+
+#fullscreen {
+  min-width: 44px;
+  font-size: 20px;
+  line-height: 1;
+}
+#fullscreen[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--wash);
+}
+.table-only > :is(header, footer),
+.table-only .layout > aside {
+  display: none;
+}
+.table-only main {
+  max-width: none;
+  padding: max(4px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right))
+    max(4px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+}
+.table-only .layout {
+  display: block;
+}
+.table-only .game-column {
+  min-height: calc(100dvh - 8px);
+  display: flex;
+  flex-direction: column;
+}
+.table-only .game-toolbar {
+  margin-bottom: 4px;
+}
+.table-only .game {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 10px !important;
+}
+.table-only .board-frame {
+  flex: 1;
+}
+.table-only .game .table {
+  flex: 1 0 auto;
+  height: auto;
+  min-height: 100px;
+}
+.table-only .scoreboard {
+  padding-bottom: 3px;
+}
+.table-only .scoreboard strong {
+  font-size: 23px;
+}
+.table-only .opponent {
+  padding: 3px 0;
+}
+.table-only .hand {
+  padding-block: 3px;
+}
+.table-only .hand-title {
+  padding-top: 3px;
+}
+.table-only .game #choices {
+  margin-bottom: 3px;
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .table-only .game-toolbar button,
+  .table-only .turn-actions button,
+  .table-only .choices button,
+  .table-only .round-actions button {
+    min-height: 30px;
+    padding-block: 3px;
+  }
+  .table-only .opponent-row,
+  .table-only .player-row {
+    margin-bottom: 2px;
+  }
+  .table-only .game #hand .tile,
+  .table-only .game #opponent-hand :is(.tile, .back) {
+    width: 46px;
+    height: 24px;
+  }
+  .table-only .game :is(#hand, #opponent-hand) .half {
+    width: 20px;
+    height: 20px;
+    padding: 1px;
+    gap: 1px;
+  }
+  .table-only .game .pool-tiles {
+    min-height: 28px;
+    padding-right: 0;
+  }
+  .table-only .game .pool-back {
+    width: 12px;
+    min-width: 12px;
+    height: 24px;
+    flex-basis: 12px;
+  }
+  .table-only .game .reserved-stack {
+    width: 24px;
+    min-width: 24px;
+    flex-basis: 24px;
+  }
+  .table-only .game .pool-back.reserved {
+    width: 24px;
+    min-width: 24px;
+    height: 12px;
+    flex-basis: 12px;
+  }
+  .table-only .game .pool-tray {
+    margin-block: 2px;
+  }
+  .table-only .game .last-move {
+    margin-block: 2px;
+    padding-block: 1px;
+  }
+}
+
+.player-area {
+  display: contents;
+}
+@media (orientation: landscape) and (min-width: 660px) and (max-height: 560px) {
+  .table-only .player-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .table-only .hand-title {
+    padding: 0;
+    flex: none;
+  }
+  .table-only #hand {
+    flex: 1;
+    min-width: 0;
+  }
+}
