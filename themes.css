@@ -568,3 +568,13 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     display: none;
   }
 }
+
+@media (min-width: 851px) and (min-height: 561px) and (hover: hover) and (pointer: fine) {
+  .table-only .hand-title {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+  .table-only .turn-actions {
+    justify-content: center;
+  }
+}
