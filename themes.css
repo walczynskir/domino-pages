@@ -546,3 +546,13 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     min-width: 0;
   }
 }
+
+.game #choices {
+  justify-content: center;
+}
+.table-only .game .pool-tray {
+  background: var(--wash);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding-inline: 4px;
+}
