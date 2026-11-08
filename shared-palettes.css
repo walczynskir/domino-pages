@@ -1,12 +1,12 @@
-/* Canonical shared palette. Copy this file unchanged to Sudoku dist/. */
+/* Canonical shared palettes in sudoku/dist/. Copy unchanged to the other games. */
 :root[data-theme="copper"] {
-  --palette-bg: #faf1e7;
+  --palette-bg: #f0e1d5;
   --palette-ink: #432d24;
   --palette-muted: #705247;
   --palette-accent: #934826;
   --palette-line: #e1c7b6;
-  --palette-wash: #f7dfcf;
-  --palette-paper: #fffaf4;
+  --palette-wash: #eed6c6;
+  --palette-paper: #f3e5da;
   --palette-primary-bg: #934826;
   --palette-primary-ink: #fff;
 }
@@ -20,4 +20,103 @@
   --palette-paper: #222b42;
   --palette-primary-bg: #aebaff;
   --palette-primary-ink: #182139;
+}
+
+:root[data-theme="ink"] {
+  --palette-control-line: #938570;
+  --palette-bg: #ebe4d5;
+  --palette-ink: #242c35;
+  --palette-muted: #656963;
+  --palette-accent: #254b72;
+  --palette-line: #d5cdbd;
+  --palette-wash: #e0d5be;
+  --palette-paper: #eee5d2;
+  --palette-primary-bg: var(--palette-accent);
+  --palette-primary-ink: #fff;
+}
+
+:root[data-theme="porcelain"] {
+  --palette-bg: #e9e9e3;
+  --palette-ink: #24364b;
+  --palette-muted: #556579;
+  --palette-accent: #365b80;
+  --palette-line: #c5cdd5;
+  --palette-wash: #dce4eb;
+  --palette-paper: #efeee8;
+  --palette-control-line: #8294a6;
+  --palette-primary-bg: #41688e;
+  --palette-primary-ink: #fff;
+}
+
+:root[data-theme="sage"] {
+  --palette-bg: #eeeee6;
+  --palette-ink: #263b36;
+  --palette-muted: #58655b;
+  --palette-accent: #355e4c;
+  --palette-line: #ccd4c8;
+  --palette-wash: #e2ead9;
+  --palette-paper: #f4f4eb;
+}
+
+:root[data-theme="ukraine"] {
+  --palette-bg: #e9eff5;
+  --palette-ink: #102c4a;
+  --palette-muted: #52677d;
+  --palette-accent: #0755a1;
+  --palette-line: #b8ccdf;
+  --palette-wash: #dce9f6;
+  --palette-paper: #f1f4f7;
+  --palette-primary-bg: #ffd43b;
+  --palette-primary-border: #e5b900;
+  --palette-primary-ink: var(--palette-ink);
+}
+
+:root[data-theme="studio"] {
+  --palette-bg: #e6e8eb;
+  --palette-ink: #20252b;
+  --palette-muted: #626b76;
+  --palette-accent: #2458cd;
+  --palette-line: #d7dce2;
+  --palette-wash: #dce2e9;
+  --palette-paper: #edf0f3;
+}
+
+:root[data-theme="forma"] {
+  --palette-bg: #f2e7db;
+  --palette-ink: #342837;
+  --palette-muted: #73626c;
+  --palette-accent: #b5442d;
+  --palette-line: #dfcec4;
+  --palette-wash: #ead8cb;
+  --palette-paper: #f5eadd;
+}
+
+:root[data-theme="energy"] {
+  --palette-bg: #eae4f5;
+  --palette-ink: #302441;
+  --palette-muted: #6a607a;
+  --palette-accent: #6235c3;
+  --palette-line: #e1d9ef;
+  --palette-wash: #e2d8f1;
+  --palette-paper: #f0e9f8;
+}
+
+:root[data-theme="tangerine"] {
+  --palette-bg: #eee6d7;
+  --palette-ink: #30291f;
+  --palette-muted: #70695f;
+  --palette-accent: #9b4f00;
+  --palette-line: #eadfca;
+  --palette-wash: #f0e0b9;
+  --palette-paper: #f3ead9;
+}
+
+:root[data-theme="contrast"] {
+  --palette-bg: #fff;
+  --palette-ink: #111;
+  --palette-muted: #333;
+  --palette-accent: #111;
+  --palette-line: #555;
+  --palette-wash: #eee;
+  --palette-paper: #fff;
 }
