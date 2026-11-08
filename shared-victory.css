@@ -10,27 +10,21 @@
   inset: var(--victory-top, 50%) auto auto var(--victory-left, 50%);
   transform: translate(-50%, -50%);
   z-index: 1;
-  display: grid;
-  justify-items: center;
-  gap: 0;
-  max-inline-size: 85vw;
   padding: 8px;
-  color: var(--palette-ink, var(--ink, #352400));
-  font: 700 clamp(18px, 4vw, 28px)/1.2 system-ui, sans-serif;
-  text-align: center;
 }
 .shared-victory-caption strong {
-  paint-order: stroke fill;
-  -webkit-text-stroke: 4px var(--palette-paper, var(--paper, #fff));
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 .shared-victory-caption svg {
   width: clamp(116px, 18vmin, 168px);
   height: auto;
-  filter: drop-shadow(0 3px 2px #402000a0);
-}
-@media (forced-colors: active) {
-  .shared-victory-caption { color: CanvasText; }
-  .shared-victory-caption strong { -webkit-text-stroke-color: Canvas; }
+  filter: drop-shadow(0 3px 5px #40200045);
 }
 .shared-victory > i {
   position: absolute;

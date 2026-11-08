@@ -15,7 +15,7 @@
     overlay.className = 'shared-victory';
     if (table) {
       const bounds = table.getBoundingClientRect();
-      const top = Math.max(96, Math.min(innerHeight - 96, bounds.top + bounds.height / 4));
+      const top = Math.max(96, Math.min(innerHeight - 96, bounds.bottom - bounds.height / 4));
       overlay.style.setProperty('--victory-left', bounds.left + bounds.width / 2 + 'px');
       overlay.style.setProperty('--victory-top', top + 'px');
     }
