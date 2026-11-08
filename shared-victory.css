@@ -11,41 +11,39 @@
   z-index: 1;
   display: grid;
   justify-items: center;
-  gap: 8px;
+  gap: 6px;
   max-inline-size: 85vw;
-  padding: 17px 28px 19px;
-  border: 1px solid #f6da8c;
-  border-radius: 22px;
-  background: radial-gradient(ellipse at top, #7b5219d9, transparent 74%), #24190fcc;
-  backdrop-filter: blur(9px);
-  color: #fff3d4;
+  padding: 8px;
+  color: var(--palette-ink, var(--ink, #352400));
   font: 700 clamp(18px, 4vw, 28px)/1.2 system-ui, sans-serif;
   text-align: center;
-  box-shadow: 0 12px 36px #1c120c66, inset 0 1px #fff1bf66;
+}
+.shared-victory-caption strong {
+  paint-order: stroke fill;
+  -webkit-text-stroke: 4px var(--palette-paper, var(--paper, #fff));
 }
 .shared-victory-caption svg {
-  width: 76px;
-  height: 76px;
-  filter: drop-shadow(0 4px 9px #ffc65370);
+  width: 100px;
+  height: 100px;
+  filter: drop-shadow(0 3px 2px #402000a0);
 }
 @media (forced-colors: active) {
-  .shared-victory-caption {
-    background: Canvas;
-    color: CanvasText;
-    border: 2px solid CanvasText;
-  }
+  .shared-victory-caption { color: CanvasText; }
+  .shared-victory-caption strong { -webkit-text-stroke-color: Canvas; }
 }
 .shared-victory > i {
   position: absolute;
   inset: 50% auto auto 50%;
-  width: 7px;
-  height: 11px;
+  z-index: 2;
+  width: 8px;
+  height: 12px;
+  border: 1px solid #26202a55;
   opacity: 0;
-  animation: shared-confetti 1.45s ease-out both;
+  animation: shared-confetti 2.25s ease-out both;
 }
 @keyframes shared-confetti {
   0% { transform: translate(0, 0) rotate(0); opacity: 1; }
-  68% { opacity: 1; }
+  75% { opacity: 1; }
   100% { transform: translate(var(--x), calc(var(--y) + 40px)) rotate(var(--spin)); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {

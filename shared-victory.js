@@ -22,10 +22,11 @@
     caption.append(label);
     overlay.append(caption);
     const colors = ['#d44758', '#f8c94d', '#2979bc', '#3c9668', '#9d62c1'];
-    for (let index = 0; index < 24; index++) {
+    const count = 32;
+    for (let index = 0; index < count; index++) {
       const piece = document.createElement('i');
-      const angle = index * Math.PI * 2 / 24;
-      const distance = 85 + (index % 4) * 22;
+      const angle = index * Math.PI * 2 / count;
+      const distance = 95 + (index % 4) * 24;
       piece.setAttribute('aria-hidden', 'true');
       piece.style.setProperty('--x', Math.cos(angle) * distance + 'px');
       piece.style.setProperty('--y', Math.sin(angle) * distance + 'px');
