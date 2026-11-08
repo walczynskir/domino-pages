@@ -2,16 +2,17 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  display: grid;
-  place-items: center;
   overflow: hidden;
   pointer-events: none;
 }
 .shared-victory-caption {
+  position: absolute;
+  inset: var(--victory-top, 50%) auto auto var(--victory-left, 50%);
+  transform: translate(-50%, -50%);
   z-index: 1;
   display: grid;
   justify-items: center;
-  gap: 6px;
+  gap: 0;
   max-inline-size: 85vw;
   padding: 8px;
   color: var(--palette-ink, var(--ink, #352400));
@@ -23,8 +24,8 @@
   -webkit-text-stroke: 4px var(--palette-paper, var(--paper, #fff));
 }
 .shared-victory-caption svg {
-  width: 100px;
-  height: 100px;
+  width: clamp(116px, 18vmin, 168px);
+  height: auto;
   filter: drop-shadow(0 3px 2px #402000a0);
 }
 @media (forced-colors: active) {
@@ -33,13 +34,13 @@
 }
 .shared-victory > i {
   position: absolute;
-  inset: 50% auto auto 50%;
+  inset: var(--victory-top, 50%) auto auto var(--victory-left, 50%);
   z-index: 2;
   width: 8px;
   height: 12px;
   border: 1px solid #26202a55;
   opacity: 0;
-  animation: shared-confetti 2.25s ease-out both;
+  animation: shared-confetti 3.2s ease-out both;
 }
 @keyframes shared-confetti {
   0% { transform: translate(0, 0) rotate(0); opacity: 1; }

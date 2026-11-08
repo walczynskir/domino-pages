@@ -383,7 +383,7 @@
       node.draggable=false;
       return node;
     }));
-    GameVictory(state.matchWinner === 0, tr('matchWon'));
+    GameVictory(state.matchWinner === 0, tr('matchWon'), document.getElementById('table'));
     balanceHand('hand');
     renderChoices();
     let message;

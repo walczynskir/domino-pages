@@ -4,7 +4,7 @@
   let timer;
   let overlay;
 
-  window.GameVictory = (won, title) => {
+  window.GameVictory = (won, title, table) => {
     if (won === wasWon) return;
     wasWon = won;
     clearTimeout(timer);
@@ -13,6 +13,12 @@
 
     overlay = document.createElement('div');
     overlay.className = 'shared-victory';
+    if (table) {
+      const bounds = table.getBoundingClientRect();
+      const top = Math.max(96, Math.min(innerHeight - 96, bounds.top + bounds.height / 4));
+      overlay.style.setProperty('--victory-left', bounds.left + bounds.width / 2 + 'px');
+      overlay.style.setProperty('--victory-top', top + 'px');
+    }
     const caption = document.createElement('div');
     caption.className = 'shared-victory-caption';
     caption.setAttribute('role', 'status');
@@ -35,6 +41,6 @@
       overlay.append(piece);
     }
     document.body.append(overlay);
-    timer = setTimeout(() => overlay.remove(), 4200);
+    timer = setTimeout(() => overlay.remove(), 4800);
   };
 })();
