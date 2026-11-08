@@ -1,5 +1,5 @@
 (() => {
-  const trophy = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 10h28v15c0 10-6 17-14 17s-14-7-14-17z" fill="#f8c94d" stroke="#8b5300" stroke-width="2"/><path d="M18 15H8v5c0 9 5 14 13 14m25-19h10v5c0 9-5 14-13 14M32 42v10m-11 3h22" fill="none" stroke="#8b5300" stroke-width="4" stroke-linecap="round"/><path d="m32 17 2.5 5 5.5.8-4 3.9 1 5.5-5-2.6-5 2.6 1-5.5-4-3.9 5.5-.8z" fill="#fff2b4"/></svg>';
+  const trophy = '<svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="shared-victory-gold" x2="0" y2="1"><stop stop-color="#fff1aa"/><stop offset=".5" stop-color="#f8c94d"/><stop offset="1" stop-color="#d78a26"/></linearGradient></defs><path d="M18 10h28v15c0 10-6 17-14 17s-14-7-14-17z" fill="url(#shared-victory-gold)" stroke="#ffe2a0" stroke-width="2"/><path d="M18 15H8v5c0 9 5 14 13 14m25-19h10v5c0 9-5 14-13 14M32 42v10m-11 3h22" fill="none" stroke="#f4bd53" stroke-width="4" stroke-linecap="round"/><path d="m32 17 2.5 5 5.5.8-4 3.9 1 5.5-5-2.6-5 2.6 1-5.5-4-3.9 5.5-.8z" fill="#fff2b4"/></svg>';
   let wasWon = false;
   let timer;
   let overlay;
