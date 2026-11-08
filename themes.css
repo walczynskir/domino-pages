@@ -650,3 +650,18 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     display: none;
   }
 }
+
+@media (min-width: 851px) {
+  .table-only .game-column {
+    width: 100%;
+    max-width: 1222px;
+    margin-inline: auto;
+  }
+  .table-only .board-frame {
+    width: min(100%, 1200px);
+    align-self: center;
+  }
+  .table-only .game .opponent > #opponent-count {
+    text-align: center;
+  }
+}
