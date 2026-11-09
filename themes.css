@@ -822,3 +822,90 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     padding-inline: 4px;
   }
 }
+
+@media (orientation: landscape) and (min-width: 600px) and (max-height: 560px) {
+  .table-only .game-column {
+    display: grid;
+    grid-template-columns: clamp(128px, 20vw, 156px) minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    gap: 4px 8px;
+  }
+  .table-only .game { display: contents; }
+  .table-only .game-toolbar {
+    grid-area: 1 / 1;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0;
+  }
+  .table-only .game-toolbar .scoreboard {
+    order: -1;
+    flex-basis: 100%;
+  }
+  .table-only .game-toolbar .game-tools {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .table-only .game .opponent {
+    grid-area: 2 / 1;
+    display: block;
+  }
+  .table-only .game .pool-tray {
+    grid-area: 3 / 1;
+    align-self: start;
+  }
+  .table-only .game .pool-tiles {
+    justify-content: flex-start;
+  }
+  .table-only .game .pool-back:not(.reserved) {
+    flex: 1 1 12px;
+    min-width: 4px;
+  }
+  .table-only .board-frame {
+    grid-area: 1 / 2 / 4 / 3;
+    min-height: 0;
+  }
+  .table-only .move-feedback { grid-area: 4 / 2; }
+  .table-only .play-dock { grid-area: 5 / 2; }
+}
+
+@media (orientation: landscape) and (min-width: 600px) and (max-height: 560px) {
+  .table-only .game-toolbar {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-content: start;
+    gap: 4px;
+  }
+  .table-only .game-toolbar .scoreboard { grid-column: 1 / -1; }
+  .table-only .game-toolbar .scoreboard > div { flex-direction: column; align-items: center; }
+  .table-only .game-toolbar .scoreboard strong { font-size: 19px; }
+  .table-only .game-toolbar .scoreboard span { font-size: 10px; }
+  .table-only .game-toolbar #match-total { margin: 0; }
+  .table-only .game-toolbar .game-tools {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 2px;
+  }
+  .table-only .game-toolbar :is(#new-game, #help-button) { font-size: 0; }
+  .table-only #new-game::before { content: "+"; font-size: 16px; }
+  .table-only #help-button::before { content: "?"; font-size: 16px; }
+  .table-only .game-toolbar button {
+    width: 100%;
+    min-width: 0;
+    min-height: 28px;
+    height: 28px;
+    padding: 0;
+  }
+  .table-only .game-toolbar .fullscreen-icon { display: inline; }
+  .table-only .game #opponent-hand :is(.tile, .back) {
+    width: 33px;
+    height: 18px;
+    flex-basis: 33px;
+  }
+  .table-only .game #opponent-hand .half { width: 13px; height: 13px; }
+  .table-only .game .play-dock { min-width: 0; flex-wrap: wrap; }
+  .table-only .game .play-dock #choices:has(> :nth-child(4)) {
+    flex-basis: 100%;
+    max-width: none;
+  }
+}
