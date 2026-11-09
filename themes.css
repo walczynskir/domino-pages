@@ -993,3 +993,10 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   .table-only #match-total { display: none; }
   .table-only #match-total-compact { display: block; }
 }
+
+@media (min-width: 851px) and (hover: hover) and (pointer: fine) {
+  body:not(.table-only) .game .table {
+    min-height: 140px;
+    max-height: var(--desktop-table-height, none);
+  }
+}
