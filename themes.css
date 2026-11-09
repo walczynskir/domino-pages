@@ -762,3 +762,63 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     padding-inline: 6px;
   }
 }
+
+@media (orientation: landscape) and (min-width: 600px) and (max-height: 560px) {
+  .table-only .game-toolbar {
+    width: 100%;
+    flex-wrap: nowrap;
+    gap: 4px 8px;
+  }
+  .table-only .game-toolbar .game-tools {
+    flex-wrap: nowrap;
+    margin-inline-start: 0;
+  }
+  .table-only .game-toolbar :is(.fullscreen-label, #target) {
+    display: none;
+  }
+  .table-only .game-toolbar .scoreboard {
+    flex: 1 1 auto;
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0;
+  }
+  .table-only .game-toolbar .scoreboard > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0 4px;
+  }
+  .table-only .game-toolbar .scoreboard .target {
+    flex-direction: column;
+    align-items: center;
+  }
+  .table-only #fullscreen-history {
+    font-size: 0;
+  }
+  .table-only #fullscreen-history::before {
+    content: "☰";
+    font-size: 16px;
+  }
+  .table-only .game .opponent {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    min-width: 0;
+  }
+  .table-only .game .opponent > #opponent-count {
+    font-size: 11px;
+    flex: none;
+  }
+  .table-only #opponent-hand {
+    flex: 1;
+    min-width: 0;
+  }
+  .table-only #computer-draw:not([hidden]) {
+    font-size: 10px;
+    padding-inline: 4px;
+  }
+}
