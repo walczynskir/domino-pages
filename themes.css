@@ -977,6 +977,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 }
 @media (orientation: landscape) and (min-width: 600px) and (max-height: 560px) {
   .table-only .game-toolbar .scoreboard > div:not(.target) {
+    text-align: start;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     column-gap: 4px;
