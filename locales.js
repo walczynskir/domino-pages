@@ -1616,7 +1616,7 @@
       "Для добору"
     ],
     "Game history": [
-      "Game history",
+      "Historia rozgrywki",
       "Game history",
       "Historial de la partida",
       "Spielverlauf",
