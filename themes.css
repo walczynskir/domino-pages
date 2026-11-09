@@ -861,11 +861,15 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     margin-block: 0;
   }
   .table-only .game .pool-tiles {
-    justify-content: flex-start;
+    justify-content: flex-end;
+    gap: 0;
   }
   .table-only .game .pool-back:not(.reserved) {
-    flex: 1 1 12px;
-    min-width: 4px;
+    flex: 0 0 12px;
+    min-width: 12px;
+  }
+  .table-only .game .pool-tiles > .pool-back + .pool-back {
+    margin-inline-start: -6px;
   }
   .table-only .board-frame {
     grid-area: 2 / 2 / 3 / -1;
@@ -882,14 +886,33 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 }
 
 @media (orientation: landscape) and (min-width: 600px) and (max-height: 560px) {
-  .table-only .game-toolbar {
+  .table-only .game-column > .game-toolbar {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     align-content: start;
+    align-self: stretch;
+    overflow-y: auto;
+    padding-block: 6px;
     gap: 6px;
   }
-  .table-only .game-toolbar .scoreboard { grid-column: 1 / -1; }
-  .table-only .game-toolbar .scoreboard > div { flex-direction: column; align-items: center; }
+  .table-only .game-toolbar .scoreboard {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-content: stretch;
+    gap: 2px;
+    padding: 4px;
+    border-bottom: 1px solid var(--line);
+  }
+  .table-only .game-toolbar .scoreboard > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .table-only .game-toolbar .scoreboard .target {
+    order: 1;
+    align-items: flex-start;
+    text-align: start;
+  }
   .table-only .game-toolbar .scoreboard strong { font-size: 19px; }
   .table-only .game-toolbar .scoreboard span { font-size: 10px; }
   .table-only .game-toolbar #match-total { margin: 0; }
@@ -899,16 +922,43 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     width: 100%;
     gap: 5px;
   }
-  .table-only #fullscreen-history { font-size: inherit; }
+  .table-only #fullscreen-history { font-size: 12px; }
   .table-only #fullscreen-history::before { content: none; }
   .table-only .game-toolbar button {
     width: 100%;
     min-width: 0;
-    min-height: clamp(30px, 9dvh, 44px);
+    min-height: clamp(28px, 8dvh, 40px);
+    font-size: 12px;
     padding: 3px 4px;
     white-space: normal;
   }
-  .table-only .game-toolbar .fullscreen-icon { display: inline; }
+  .table-only .game-toolbar #fullscreen .fullscreen-icon {
+    display: inline;
+    font-size: 19px;
+  }
+  .table-only .game .opponent {
+    background: var(--wash);
+    border-radius: 8px;
+    padding-inline: 6px;
+  }
+  .table-only .game .opponent > #opponent-count {
+    flex: 0 1 auto;
+    text-align: start;
+  }
+  .table-only .game .opponent #computer-draw {
+    margin-inline: 0;
+  }
+  .table-only .game .play-dock {
+    background: var(--wash);
+    border-radius: 8px;
+    padding-inline: 6px;
+  }
+  .table-only .play-dock:has(#continue:not([hidden])) .turn-actions {
+    display: none;
+  }
+  .table-only .play-dock:has(#continue:not([hidden])) .round-actions {
+    margin-inline-start: auto;
+  }
   .table-only .game #opponent-hand :is(.tile, .back) {
     width: 33px;
     height: 18px;
