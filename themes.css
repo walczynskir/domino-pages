@@ -824,15 +824,21 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 }
 
 @media (orientation: landscape) and (min-width: 600px) and (max-height: 560px) {
+  .table-only main { padding-left: env(safe-area-inset-left); }
   .table-only .game-column {
     display: grid;
-    grid-template-columns: clamp(128px, 20vw, 156px) minmax(0, 1fr);
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+
+    grid-template-columns: 120px minmax(0, 1fr) 132px;
+    direction: ltr;
+    grid-template-rows: auto minmax(78px, 1fr) auto auto;
     gap: 4px 8px;
   }
   .table-only .game { display: contents; }
   .table-only .game-toolbar {
-    grid-area: 1 / 1;
+    grid-area: 1 / 1 / -1 / 2;
+    background: var(--paper);
+    border-inline-end: 1px solid var(--line);
+    padding-inline: 4px;
     flex-wrap: wrap;
     justify-content: center;
     margin: 0;
@@ -846,12 +852,13 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     justify-content: center;
   }
   .table-only .game .opponent {
-    grid-area: 2 / 1;
-    display: block;
+    grid-area: 1 / 2 / 2 / -1;
+    display: flex;
   }
   .table-only .game .pool-tray {
-    grid-area: 3 / 1;
-    align-self: start;
+    grid-area: 4 / 3;
+    align-self: center;
+    margin-block: 0;
   }
   .table-only .game .pool-tiles {
     justify-content: flex-start;
@@ -861,11 +868,17 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     min-width: 4px;
   }
   .table-only .board-frame {
-    grid-area: 1 / 2 / 4 / 3;
+    grid-area: 2 / 2 / 3 / -1;
     min-height: 0;
   }
-  .table-only .move-feedback { grid-area: 4 / 2; }
-  .table-only .play-dock { grid-area: 5 / 2; }
+  .table-only .move-feedback { grid-area: 3 / 2 / 4 / -1; }
+  .table-only .play-dock { grid-area: 4 / 2 / 5 / -1; }
+  .table-only .game-column:has(.pool-above) .opponent { grid-column-end: 3; }
+  .table-only .game-column:has(.pool-above) .pool-tray { grid-row: 1; }
+  .table-only .game-column:has(.pool-tray:not(.pool-above)) .play-dock { grid-column-end: 3; }
+  [dir="rtl"] .table-only :is(.game-toolbar, .opponent, .board-frame, .move-feedback, .play-dock) {
+    direction: rtl;
+  }
 }
 
 @media (orientation: landscape) and (min-width: 600px) and (max-height: 560px) {
