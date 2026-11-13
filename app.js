@@ -12,6 +12,8 @@
   for(const lang of DominoI18n.languages)if(!dictionary[lang])dictionary[lang]=dictionary.en;
   DominoI18n.addLanguages(document.getElementById('language'));
   const themes = ['porcelain','ink','sage','studio','forma','energy','tangerine','ukraine','classic','garden','contrast'];
+  // Keep the shared menu order independent of translated labels.
+  const themeOrder = ['classic','garden','sage','ink','studio','forma','energy','tangerine','porcelain','ukraine'];
   const rewardThemes = [
     { value: 'copper', name: 'Copper', matches: 3 },
     { value: 'night-sky', name: 'Night sky', matches: 10 }
@@ -19,7 +21,7 @@
   const themeAvailable = value => themes.includes(value) ||
     rewardThemes.some(reward => reward.value === value && stats.matches >= reward.matches);
   const key = 'domino-save-v1';
-  let prefs = { language:'pl', theme:'porcelain', large:false, progress:true, starter:'alternate', previousTheme:'porcelain', mustDraw:true, requireDeclaration:true, history:false, openingDoublesOnly:true, declarationPenalty:'three', aiDifficulty:'medium' };
+  let prefs = { language:'pl', theme:'classic', large:false, progress:true, starter:'alternate', previousTheme:'classic', mustDraw:true, requireDeclaration:true, history:false, openingDoublesOnly:true, declarationPenalty:'three', aiDifficulty:'medium' };
   let stats = { matches:0, wins:0, points:0, opponentPoints:0 }, state, selected = null, declaredMove = null, timer = null, storageProblem = false;
   let boardZoom=1, pendingDrop=null;
   let viewZoom = null, drag = null, boardKey = null, draggedTile = null, tileDrag = null, suppressTileClickUntil = 0;
@@ -34,8 +36,8 @@
     }
   } catch { storageProblem = true; }
   if (!dictionary[prefs.language]) prefs.language = 'pl';
-  if (!themeAvailable(prefs.theme)) prefs.theme = 'porcelain';
-  if (!themeAvailable(prefs.previousTheme) || prefs.previousTheme === 'contrast') prefs.previousTheme = 'porcelain';
+  if (!themeAvailable(prefs.theme)) prefs.theme = 'classic';
+  if (!themeAvailable(prefs.previousTheme) || prefs.previousTheme === 'contrast') prefs.previousTheme = 'classic';
   if (!['alternate','winner'].includes(prefs.starter)) prefs.starter = 'alternate';
   if (!state) state = G.create(Math.random, null, { roundStarter:prefs.starter, mustDraw:prefs.mustDraw,requireDeclaration:prefs.requireDeclaration,aiDifficulty:prefs.aiDifficulty,declarationPenalty:prefs.declarationPenalty,openingDoublesOnly:prefs.openingDoublesOnly });
   state.settings.mustDraw = state.settings.mustDraw !== false;
@@ -96,8 +98,8 @@
     const rules = tr('rules').slice();
     if (state.settings.mustDraw === false) rules[2] = prefs.language === 'pl' ? 'Brak ruchu? Możesz dobrać do 2 kości lub spasować. Pasującą dobraną kość musisz zagrać.' : 'No move? Draw up to 2 tiles or pass. A matching drawn tile must be played.';
     $('rules').replaceChildren(...rules.map(text => { const li = document.createElement('li'); li.textContent = text; return li; }));
-    const options = themes.filter(value => value !== 'contrast').map((value, index) => ({
-      value, name: tr('themes')[index], matches: 0
+    const options = themeOrder.map(value => ({
+      value, name: tr('themes')[themes.indexOf(value)], matches: 0
     })).concat(rewardThemes);
     $('theme').replaceChildren(...options.map(theme => {
       const option = document.createElement('option');
