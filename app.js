@@ -227,13 +227,16 @@
       target.onclick=()=>playSelected(move.arm);layer.append(target);
       markers.push({ arm: move.arm, x: px, y: py, direction: screenDirection });
     }
-    if (state.settings.requireDeclaration && matchMedia('(min-width: 851px) and (hover: hover) and (pointer: fine)').matches) {
+    if (state.settings.requireDeclaration) {
+      const compact = matchMedia('(min-width: 851px) and (hover: hover) and (pointer: fine)').matches;
+      const radius = compact ? 14 : 22;
+      const distance = 24 + radius;
       const occupied = markers.map(({ x, y }) => ({ x, y, radius: 22 }));
       for (const { arm, x, y, direction } of markers) {
-        const offsets = direction?.[1] ? [[40,0],[-40,0],[0,40],[0,-40]] : [[0,-40],[0,40],[40,0],[-40,0]];
-        const points = offsets.map(([dx, dy]) => ({ x: x + dx, y: y + dy, radius: 14 }));
-        const point = points.find(p => p.x >= 14 && p.y >= 14 && p.x <= table.clientWidth - 14 &&
-          p.y <= table.clientHeight - 14 && occupied.every(q => Math.hypot(p.x - q.x, p.y - q.y) >= p.radius + q.radius + 2));
+        const offsets = direction?.[1] ? [[distance,0],[-distance,0],[0,distance],[0,-distance]] : [[0,-distance],[0,distance],[distance,0],[-distance,0]];
+        const points = offsets.map(([dx, dy]) => ({ x: x + dx, y: y + dy, radius }));
+        const point = points.find(p => p.x >= radius && p.y >= radius && p.x <= table.clientWidth - radius &&
+          p.y <= table.clientHeight - radius && occupied.every(q => Math.hypot(p.x - q.x, p.y - q.y) >= p.radius + q.radius + 2));
         if (!point) continue;
         occupied.push(point);
         const button = document.createElement('button');
