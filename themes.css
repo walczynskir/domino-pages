@@ -1051,3 +1051,37 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     padding-block: 2px;
   }
 }
+
+:root:is([data-theme="classic"], [data-theme="garden"]) {
+  --bg: #e7eee5;
+  --paper: #f7f5eb;
+  --ink: #182d20;
+  --muted: #496151;
+  --accent: #225e3b;
+  --line: #acbeae;
+  --wash: #deebdd;
+  --primary-bg: var(--accent);
+  --primary-ink: #fff;
+  --table: #175739;
+  --radius: 16px;
+  --control-radius: 999px;
+}
+[data-theme="classic"] #table {
+  background: radial-gradient(ellipse at 50% 38%, #287846, #125032 78%);
+}
+:root[data-theme="garden"] {
+  --table: #56704e;
+}
+[data-theme="garden"] body {
+  background: linear-gradient(#17251738, #17251738), url("garden.webp") center / cover no-repeat fixed;
+}
+[data-theme="garden"] .table-only .move-feedback {
+  background: var(--paper);
+  border-radius: 5px;
+}
+:is([data-theme="classic"], [data-theme="garden"]) #board .tile.last-played {
+  outline-color: #ffcf62;
+}
+:is([data-theme="classic"], [data-theme="garden"]) .placement-target.placement-declare {
+  background: #fff0b9;
+}

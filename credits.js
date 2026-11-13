@@ -6,7 +6,7 @@
   const requested = new URLSearchParams(location.search).get('lang');
   let language=DominoI18n.languages.includes(requested||prefs.language)?(requested||prefs.language):'pl';
   DominoI18n.addLanguages(document.querySelector('#credits-language'));
-  const themes = ['porcelain','ink','sage','studio','forma','energy','tangerine','ukraine','contrast','copper','night-sky'];
+  const themes = ['porcelain','ink','sage','studio','forma','energy','tangerine','ukraine','classic','garden','contrast','copper','night-sky'];
   document.documentElement.dataset.theme = themes.includes(prefs.theme) ? prefs.theme : 'porcelain';
   document.body.classList.toggle('large', prefs.large === true);
   const pl = Object.fromEntries([...document.querySelectorAll('[data-text]')].map(node=>[node.dataset.text,node.textContent]));

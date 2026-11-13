@@ -25,6 +25,9 @@
     "zh-Hans": "简体中文"
   },
   "catalog": {
+    "Classic": ["Klasyczny", "Classic", "Clásico", "Klassisch", "经典", "क्लासिक", "Classique", "كلاسيكي", "Classico", "Класичний"],
+    "Garden": ["Ogród", "Garden", "Jardín", "Garten", "花园", "बगीचा", "Jardin", "الحديقة", "Giardino", "Сад"],
+    "The Garden illustration comes from Eight Aces.": ["Ilustracja Ogrodu pochodzi z Ośmiu Asów.", "The Garden illustration comes from Eight Aces.", "La ilustración del Jardín procede de Ocho Ases.", "Die Gartenillustration stammt aus Acht Asse.", "花园插图来自《八张王牌》。", "बगीचे का चित्र आठ इक्कों से लिया गया है।", "L’illustration du Jardin vient de Huit As.", "رسم الحديقة مأخوذ من لعبة ثمانية آسات.", "L’illustrazione del Giardino proviene da Otto Assi.", "Ілюстрацію саду взято з гри «Вісім тузів»."],
     "Full screen": ["Pełny ekran", "Full screen", "Pantalla completa", "Vollbild", "全屏", "पूर्ण स्क्रीन", "Plein écran", "ملء الشاشة", "Schermo intero", "Повний екран"],
     "Exit full screen": ["Wyjdź z pełnego ekranu", "Exit full screen", "Salir de pantalla completa", "Vollbild verlassen", "退出全屏", "पूर्ण स्क्रीन से बाहर निकलें", "Quitter le plein écran", "الخروج من ملء الشاشة", "Esci da schermo intero", "Вийти з повноекранного режиму"],
     "Beginner: picks a random legal move.": ["Początkujący: losuje spośród dozwolonych ruchów.", "Beginner: picks a random legal move.", "Principiante: elige al azar una jugada válida.", "Anfänger: wählt einen zufälligen erlaubten Zug.", "初级：随机选择合法走法。", "शुरुआती: कोई वैध चाल यादृच्छिक रूप से चुनता है।", "Débutant : choisit un coup légal au hasard.", "مبتدئ: يختار حركة قانونية عشوائيًا.", "Principiante: sceglie una mossa valida a caso.", "Початківець: випадково обирає допустимий хід."],
