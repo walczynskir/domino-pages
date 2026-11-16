@@ -114,7 +114,6 @@ header .preferences label{min-width:0}
 header .preferences label>span{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 header .preferences select{width:100%;max-width:none;min-width:0;min-height:44px;padding:9px 12px;font-size:14px}
 .intro-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.intro-actions #settings-button{width:42px;min-width:42px;padding:8px}
 @media(max-width:640px){
  header{gap:12px;padding:12px 14px}
  header .brand{font-size:23px;letter-spacing:-.6px}
@@ -310,7 +309,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 .game-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;margin-bottom:10px}
 .game-tools{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;margin-inline-start:auto}
 .game-toolbar button{white-space:nowrap}
-@media(max-width:540px){.game-toolbar{gap:8px 12px}.game-toolbar button{font-size:12px;padding:8px 12px}.game-tools{gap:5px}}
+@media(max-width:540px){.game-toolbar{gap:8px 12px}.game-toolbar button:not(.shared-settings-button){font-size:12px;padding:8px 12px}.game-tools{gap:5px}}
 
 /* A non-playable tile is still a visible object, especially the blank double. */
 .game #hand .tile:disabled{opacity:1}
@@ -475,7 +474,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 }
 
 @media (orientation: landscape) and (max-height: 560px) {
-  .table-only .game-toolbar button,
+  .table-only .game-toolbar button:not(.shared-settings-button),
   .table-only .turn-actions button,
   .table-only .choices button,
   .table-only .round-actions button {
@@ -715,7 +714,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   }
   .table-only .game-toolbar .scoreboard { flex-basis: 138px; }
   .table-only .game-toolbar .game-tools { gap: 4px; }
-  .table-only .game-toolbar button { padding-inline: 7px; }
+  .table-only .game-toolbar button:not(.shared-settings-button) { padding-inline: 7px; }
   .table-only .move-feedback {
     display: flex;
     gap: 6px;
@@ -924,7 +923,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   }
   .table-only #fullscreen-history { font-size: 12px; }
   .table-only #fullscreen-history::before { content: none; }
-  .table-only .game-toolbar button {
+  .table-only .game-toolbar button:not(.shared-settings-button) {
     width: 100%;
     min-width: 0;
     min-height: clamp(28px, 8dvh, 40px);
@@ -932,6 +931,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
     padding: 3px 4px;
     white-space: normal;
   }
+  .table-only .game-toolbar button.shared-settings-button { inline-size: 100%; }
   .table-only .game-toolbar #fullscreen .fullscreen-icon {
     display: inline;
     font-size: 19px;
