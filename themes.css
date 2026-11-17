@@ -1074,6 +1074,12 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
   }
 }
 
+@media (orientation: portrait) {
+  .table-only .game-toolbar .scoreboard {
+    padding-inline: 12px;
+  }
+}
+
 @media (orientation: portrait) and (max-width: 640px) {
   .table-only .game-column {
     height: calc(100dvh - max(4px, env(safe-area-inset-top)) - max(4px, env(safe-area-inset-bottom)));
