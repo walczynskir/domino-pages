@@ -61,6 +61,12 @@ button:not(.tile),select{border-radius:var(--control-radius)}
 .turn-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 /* A long arm scrolls inside the table, never widens the page. */
 .layout{grid-template-columns:minmax(0,1fr) 270px}
+body:not(.table-only) .layout:not(:has(> aside > .card:not([hidden]))) {
+  grid-template-columns: minmax(0, 1fr);
+}
+body:not(.table-only) .layout > aside:not(:has(> .card:not([hidden]))) {
+  display: none;
+}
 .layout>.card,.layout>aside,.table{min-width:0;max-width:100%}
 @media(max-width:850px){.layout{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:540px){.board-caption{flex-wrap:wrap}.hand-title{flex-wrap:wrap}}
