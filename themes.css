@@ -606,6 +606,49 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 .table-only .game-toolbar .game-tools {
   flex-wrap: wrap;
 }
+/* Keep the score on its own row when there is no landscape sidebar. */
+@media (max-width: 1099px) and (orientation: portrait),
+       (max-width: 599px),
+       (max-width: 1099px) and (min-height: 561px) {
+  .table-only .game-column > .game-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 5px;
+  }
+  .table-only .game-toolbar .scoreboard {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .table-only .game-toolbar #new-game {
+    justify-self: start;
+    max-inline-size: 100%;
+    padding-inline: 8px;
+    white-space: normal;
+  }
+  .table-only .game-toolbar .game-tools {
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+  .table-only #fullscreen .fullscreen-label { display: none; }
+  .table-only #fullscreen .fullscreen-icon { display: inline; }
+  .table-only #fullscreen-history {
+    min-inline-size: 44px;
+    min-block-size: 44px;
+    padding-inline: 0;
+    font-size: 0;
+  }
+  .table-only #fullscreen-history::before {
+    content: "☰" / "";
+    font-size: 16px;
+  }
+}
+@media (max-width: 400px) {
+  .table-only .game-toolbar #help-button {
+    max-inline-size: 80px;
+    white-space: normal;
+    padding-inline: 5px;
+  }
+}
 #history-drawer {
   position: fixed;
   inset: 0 0 0 auto;
