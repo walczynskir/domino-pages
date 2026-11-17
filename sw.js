@@ -1,5 +1,5 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.6.3';
+const cacheName = cachePrefix + '1.6.4';
 const scope = self.registration.scope;
 const assetNames = [
   'app.js', 'apple-touch-icon.png', 'board-view.js', 'credits.html',
