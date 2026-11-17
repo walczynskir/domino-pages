@@ -1,10 +1,10 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.6.6';
+const cacheName = cachePrefix + '1.7.0';
 const scope = self.registration.scope;
 const assetNames = [
   'app.js', 'apple-touch-icon.png', 'board-view.js', 'credits.html',
   'credits.js', 'engine.js', 'favicon.ico', 'favicon.svg',
-  'game.js', 'games-chest-menu.css', 'games-chest-menu.js', 'garden.webp',
+  'results.js', 'game.js', 'games-chest-menu.css', 'games-chest-menu.js', 'garden.webp',
   'help.js', 'history.js', 'i18n.js', 'icon-192.png',
   'icon-512.png', 'icon-maskable.png', 'index.html', 'locales.js',
   'logo.svg', 'manifest.webmanifest', 'settings-gear.svg', 'shared-game.css',

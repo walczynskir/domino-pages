@@ -19,7 +19,7 @@
     { value: 'night-sky', name: 'Night sky', matches: 10 }
   ];
   const themeAvailable = value => themes.includes(value) ||
-    rewardThemes.some(reward => reward.value === value && stats.matches >= reward.matches);
+    rewardThemes.some(reward => reward.value === value && stats.completedMatches >= reward.matches);
   const key = 'domino-save-v1';
   let prefs = { language:'pl', theme:'classic', large:false, progress:true, starter:'alternate', previousTheme:'classic', mustDraw:true, requireDeclaration:true, history:false, openingDoublesOnly:true, declarationPenalty:'three', aiDifficulty:'medium' };
   let stats = { matches:0, wins:0, points:0, opponentPoints:0 }, state, selected = null, declaredMove = null, timer = null, storageProblem = false;
@@ -35,6 +35,7 @@
       state = saved.state; prefs = { ...prefs, ...saved.prefs }; stats = { ...stats, ...saved.stats };
     }
   } catch { storageProblem = true; }
+  stats.completedMatches ??= stats.matches;
   if (!dictionary[prefs.language]) prefs.language = 'pl';
   if (!themeAvailable(prefs.theme)) prefs.theme = 'classic';
   if (!themeAvailable(prefs.previousTheme) || prefs.previousTheme === 'contrast') prefs.previousTheme = 'classic';
@@ -51,6 +52,7 @@
   state.scores = state.scores.map(score => Math.min(150, score));
   for (const round of state.roundHistory || []) if (round.scores) round.scores = round.scores.map(score => Math.min(150, score));
   G.repairEmptyHandTie(state);
+  DominoResults.prepare(state, stats);
   function save() {
     try { localStorage.setItem(key, JSON.stringify({ version:1, state, prefs, stats })); storageProblem = false; }
     catch { storageProblem = true; }
@@ -103,7 +105,7 @@
       option.value = theme.value;
       option.disabled = !themeAvailable(theme.value);
       option.textContent = DominoI18n.text(theme.name, prefs.language);
-      if (option.disabled) option.textContent += ` · ${stats.matches}/${theme.matches}`;
+      if (option.disabled) option.textContent += ` · ${stats.completedMatches}/${theme.matches}`;
       return option;
     }));
     $('theme').value = prefs.theme === 'contrast' ? prefs.previousTheme : prefs.theme;
@@ -264,9 +266,7 @@
     }
   }
   function recordResult() {
-    if (state.matchWinner === null || state.recorded) return;
-    stats.matches++; if (state.matchWinner === 0) { stats.wins++; stats.points += E.matchPoints(state.scores[1]); } else { stats.opponentPoints += E.matchPoints(state.scores[0]); }
-    state.recorded = true;
+    DominoResults.record(state, stats);
   }
   function fitBoard() {
     const board = $('board'), table = $('table');
@@ -426,7 +426,7 @@
     const gamesLabel = prefs.language === 'pl' ? 'Partie' : 'Games';
     $('match-total-compact').textContent = `${gamesLabel} ${stats.points}:${stats.opponentPoints}`;
     $('wins').textContent = stats.wins; $('matches').textContent = stats.matches; $('match-points').textContent = stats.points;
-    $('badges').replaceChildren(...[[stats.wins>=1,'badgeFirst'],[stats.wins>=5,'badgeFive'],[stats.matches>=10,'badgeTen']].filter(([ok])=>ok).map(([,label])=>{const badge=document.createElement('span');badge.className='badge';badge.textContent=tr(label);return badge;}));
+    $('badges').replaceChildren(...[[stats.wins>=1,'badgeFirst'],[stats.wins>=5,'badgeFive'],[stats.completedMatches>=10,'badgeTen']].filter(([ok])=>ok).map(([,label])=>{const badge=document.createElement('span');badge.className='badge';badge.textContent=tr(label);return badge;}));
     save(); if (storageProblem) $('save-note').textContent=tr('storage');
     DominoI18n.apply(document.body,prefs.language);
   }
@@ -455,9 +455,31 @@
   $('declaration-penalty').onchange=e=>{prefs.declarationPenalty=e.target.value;state.settings.declarationPenalty=prefs.declarationPenalty;render();};
   $('must-draw').onchange=e=>{prefs.mustDraw=e.target.checked;state.settings.mustDraw=prefs.mustDraw;render();};
   $('continue').onclick=()=>{clearTimeout(timer);if(state.matchWinner!==null){state=G.nextMatch(state);state.settings.roundStarter=prefs.starter;state.settings.aiDifficulty=prefs.aiDifficulty;state.settings.declarationPenalty=prefs.declarationPenalty;state.settings.mustDraw=prefs.mustDraw;state.settings.requireDeclaration=prefs.requireDeclaration;state.settings.openingDoublesOnly=prefs.openingDoublesOnly;}else G.nextRound(state);selected=null;declaredMove=null;render();schedule();};
-  $('new-game').onclick=()=>$('confirm').showModal();
-  $('cancel').onclick=()=>$('confirm').close();
-  $('confirm-new').onclick=()=>{clearTimeout(timer);const starter=state.matchWinner===null?null:1-state.matchWinner;state=G.create(Math.random,starter,{roundStarter:prefs.starter,mustDraw:prefs.mustDraw,requireDeclaration:prefs.requireDeclaration,aiDifficulty:prefs.aiDifficulty,declarationPenalty:prefs.declarationPenalty,openingDoublesOnly:prefs.openingDoublesOnly});selected=null;declaredMove=null;$('confirm').close();render();schedule();};
+  function replaceMatch() {
+    clearTimeout(timer);
+    try {
+      const replacement = DominoResults.replace(state, stats, starter =>
+        G.create(Math.random, starter, {roundStarter:prefs.starter,mustDraw:prefs.mustDraw,requireDeclaration:prefs.requireDeclaration,aiDifficulty:prefs.aiDifficulty,declarationPenalty:prefs.declarationPenalty,openingDoublesOnly:prefs.openingDoublesOnly}),
+        (nextState, nextStats) => localStorage.setItem(key, JSON.stringify({version:1,state:nextState,prefs,stats:nextStats})));
+      state = replacement.state; stats = replacement.stats;
+      selected = null; declaredMove = null;
+      $('confirm').close(); render(); schedule();
+    } catch {
+      storageProblem = true;
+      $('confirm-text').textContent = tr('storage');
+      if (!$('confirm').open) $('confirm').showModal();
+    }
+  }
+  $('new-game').onclick = () => {
+    clearTimeout(timer);
+    if (!DominoResults.unfinished(state)) { replaceMatch(); return; }
+    $('confirm-text').textContent = DominoI18n.text('Starting a new game counts the current game as a loss.', prefs.language);
+    $('confirm-text').textContent += ' ' + DominoI18n.text('The computer receives {points} game points.', prefs.language).replace('{points}', E.matchPoints(state.scores[0]));
+    $('confirm').showModal();
+  };
+  $('cancel').onclick = () => $('confirm').close();
+  $('confirm').addEventListener('close', schedule);
+  $('confirm-new').onclick = () => { if ($('confirm').open) replaceMatch(); };
   $('help-button').onclick=()=>{clearTimeout(timer);DominoHelp.open(prefs.language,schedule);};
   const settings = $('settings');
   for (const button of settings.querySelectorAll('.setting-info')) {

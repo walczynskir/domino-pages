@@ -2,7 +2,7 @@
   'use strict';
   const E = typeof module !== 'undefined' ? require('./engine.js') : root.DominoEngine;
   function create(random = Math.random, starter = null, settings = {}) {
-    const state = { version: 1, settings: { roundStarter: 'alternate', mustDraw: true, requireDeclaration: true, openingDoublesOnly: true, declarationPenalty: 'three', aiDifficulty: 'medium', ...settings }, declarationErrors: [0, 0], scores: [0, 0], round: 0, matchWinner: null };
+    const state = { matchId: globalThis.crypto?.randomUUID?.() || Date.now().toString(36) + Math.random().toString(36).slice(2), started: false, version: 1, settings: { roundStarter: 'alternate', mustDraw: true, requireDeclaration: true, openingDoublesOnly: true, declarationPenalty: 'three', aiDifficulty: 'medium', ...settings }, declarationErrors: [0, 0], scores: [0, 0], round: 0, matchWinner: null };
     startRound(state, random, starter);
     return state;
   }
@@ -79,6 +79,7 @@
   }
   function play(s, id, arm, declared = false) {
     if (!legal(s).some(m => m.id === id && m.arm === arm)) throw new Error('Illegal move');
+    s.started = true;
     const player = s.turn;
     s.drawnThisTurn = 0;
     if (s.lastDrawn) s.lastDrawn[player] = null;
@@ -115,6 +116,7 @@
     const player = s.turn;
     const ends = ports(s.board).map(arm => tip(s.board, arm));
     const result = E.draw(s.hands[player], s.pool, ends, 1);
+    s.started = true;
     s.drawnThisTurn = (s.drawnThisTurn || 0) + result.drawn.length;
     s.lastDrawn ||= [null,null];
     if (result.drawn.length) s.lastDrawn[player] = result.drawn[0].id;
@@ -134,6 +136,7 @@
   function pass(s) {
     if (!s.board || s.roundResult || s.matchWinner !== null || legal(s).length) throw new Error('Cannot pass');
     if (s.pool.length > 2 && s.settings.mustDraw !== false) throw new Error('Must draw before passing');
+    s.started = true;
     s.events.push({ player: s.turn, drawn: 0, pass: true, ends: ports(s.board).map(arm => tip(s.board, arm)) });
     s.lastPoints = 0; s.drawnThisTurn = 0; s.turn = 1 - s.turn;
     detectBlock(s);
