@@ -139,3 +139,82 @@ body #fullscreen-history::before { content: none; }
 body .game-toolbar button:disabled { opacity: .45; }
 
 body.table-only #fullscreen-history::before { content: none; }
+
+/* Review proposal: low landscape screens use the side area for controls. */
+body.table-only.landscape-controls .game-column {
+  grid-template-rows: auto minmax(78px, 1fr) auto auto;
+}
+body.table-only.landscape-controls .game-column > .game-toolbar {
+  grid-area: 1 / 1 / -1 / 2;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 6px 8px;
+  margin: 0;
+  min-height: 0;
+  overflow: visible;
+}
+body.table-only.landscape-controls .game-toolbar .scoreboard {
+  display: flex;
+  align-items: stretch;
+  flex: none;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 0 5px;
+  margin: 0;
+  border-bottom: 1px solid var(--line);
+}
+body.table-only.landscape-controls .game-toolbar .scoreboard > div:not(.target) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  text-align: start;
+  align-items: baseline;
+}
+body.table-only.landscape-controls .game-toolbar .scoreboard strong { font-size: 19px; }
+body.table-only.landscape-controls .game-toolbar .scoreboard span { font-size: 10px; }
+body.table-only.landscape-controls .game-toolbar .scoreboard .target {
+  order: 1;
+  align-items: flex-start;
+  text-align: start;
+}
+body.table-only.landscape-controls .game-toolbar #match-total { display: none; }
+body.table-only.landscape-controls .game-toolbar #match-total-compact { display: inline; }
+body.table-only.landscape-controls .game-toolbar #declaration-errors {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+body.table-only.landscape-controls .game-toolbar #new-game {
+  width: 100%;
+  min-height: 44px;
+  padding: 4px;
+  white-space: normal;
+  font-size: 12px;
+}
+body.table-only.landscape-controls .game-toolbar #new-game .toolbar-label {
+  display: inline;
+  overflow-wrap: anywhere;
+}
+body.table-only.landscape-controls .game-toolbar #new-game .toolbar-icon { display: none; }
+body.table-only.landscape-controls .game-toolbar .game-tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(44px, 1fr));
+  gap: 4px;
+  margin: 0;
+  width: 100%;
+}
+body.table-only.landscape-controls .game-toolbar .game-tools > button {
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  margin: 0;
+  justify-self: center;
+}
+body.table-only.landscape-controls .game .opponent { grid-area: 1 / 2 / 2 / -1; }
+body.table-only.landscape-controls .game .board-frame { grid-area: 2 / 2 / 3 / -1; }
+body.table-only.landscape-controls .game .move-feedback { grid-area: 3 / 2 / 4 / -1; }
+body.table-only.landscape-controls .game .play-dock { grid-area: 4 / 2 / 5 / -1; }
+body.table-only.landscape-controls .game .pool-tray { grid-area: 4 / 3; }
+body.table-only.landscape-controls .game-column:has(.pool-above) .pool-tray { grid-row: 1; }

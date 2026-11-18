@@ -1,0 +1,11 @@
+/* Domino field labels retain their existing translated IDs. */
+.shared-settings .setting-item > select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  margin-block-end: 12px;
+}
+.shared-settings .setting-description p { margin: 0 0 6px; }
+.shared-settings .setting-description p:last-child { margin-bottom: 0; }
+.shared-settings .setting-description ul { padding-inline-start: 20px; margin: 0; }
+.shared-settings .settings-body > fieldset { flex-shrink: 0; }

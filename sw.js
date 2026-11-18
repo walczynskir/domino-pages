@@ -1,5 +1,5 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.8.0';
+const cacheName = cachePrefix + '1.9.0';
 const scope = self.registration.scope;
 const assetNames = [
   'app.js', 'apple-touch-icon.png', 'board-view.js', 'credits.html',
@@ -10,7 +10,7 @@ const assetNames = [
   'logo.svg', 'manifest.webmanifest', 'settings-gear.svg', 'shared-game.css',
   'shared-palettes.css',
   'shared-victory.css', 'shared-victory.js', 'style.css', 'themes.css',
-  'toolbar.css', 'version.json',
+  'shared-settings.css', 'settings.css', 'settings-strings.js', 'toolbar.css', 'version.json',
 ];
 const assets = new Set(assetNames.map(name => new URL(name, scope).href));
 

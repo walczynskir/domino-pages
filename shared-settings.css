@@ -1,0 +1,67 @@
+/* Games Chest settings dialog. The palette is supplied by shared-palettes.css. */
+dialog.shared-settings {
+  box-sizing: border-box;
+  inline-size: min(560px, calc(100% - 24px));
+  max-block-size: min(90dvh, 820px);
+  padding: 0;
+  overflow: hidden;
+  text-align: start;
+}
+dialog.shared-settings[open] { display: flex; }
+.shared-settings .settings-shell {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: hidden;
+}
+.shared-settings .settings-header {
+  display: block;
+  flex: none;
+  inline-size: 100%;
+  max-inline-size: none;
+  margin: 0;
+  padding: 16px 22px 14px;
+  border-block-end: 1px solid var(--line);
+  background: var(--paper);
+}
+.shared-settings .settings-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.shared-settings .settings-heading h2 { margin: 0; }
+.shared-settings .settings-heading button {
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  flex: none;
+  padding: 0;
+  font-size: 24px;
+  line-height: 1;
+}
+.shared-settings .settings-summary { margin: 6px 0 0; color: var(--muted); font-size: .9em; }
+.shared-settings .settings-body { min-block-size: 0; padding: 18px 22px; overflow: auto; overscroll-behavior: contain; }
+.shared-settings .settings-section { min-inline-size: 0; margin: 0; padding: 0; border: 0; }
+.shared-settings .settings-section + .settings-section { margin-block-start: 20px; }
+.shared-settings section.settings-section { padding-block-start: 18px; border-block-start: 1px solid var(--line); }
+.shared-settings :is(legend, h3) { padding: 0; margin: 0 0 6px; color: var(--ink); font-size: 1em; font-weight: 700; }
+.shared-settings .setting-item + .setting-item { border-block-start: 1px solid var(--line); }
+.shared-settings .setting-row { display: flex; align-items: center; gap: 8px; min-block-size: 60px; }
+.shared-settings .setting-row label { display: flex; align-items: center; flex: 1; gap: 12px; min-inline-size: 0; min-block-size: 44px; padding-block: 10px; cursor: pointer; }
+.shared-settings .setting-row input { flex: none; inline-size: 19px; block-size: 19px; margin: 0; accent-color: var(--accent); }
+.shared-settings .setting-caption { display: grid; min-inline-size: 0; gap: 3px; line-height: 1.4; }
+.shared-settings .setting-timing { color: var(--muted); font-size: .8em; font-weight: 400; }
+.shared-settings .setting-info { display: inline-grid; place-items: center; flex: 0 0 44px; inline-size: 44px; block-size: 44px; min-block-size: 44px; padding: 0; color: var(--accent); font-size: 20px; line-height: 1; }
+.shared-settings .setting-info[aria-expanded="true"] { background: var(--wash); border-color: var(--accent); }
+.shared-settings .setting-description { margin: 0 0 12px; padding: 10px 12px; border-radius: 6px; background: var(--wash); color: var(--ink); font-size: .9em; line-height: 1.5; }
+.shared-settings .settings-backup-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-block-start: 12px; }
+.shared-settings .settings-backup-actions button { min-block-size: 44px; }
+.shared-settings #backup-status:empty { display: none; }
+.shared-settings .settings-save-error { margin-block: 0 16px; padding: 10px 12px; border-inline-start: 4px solid var(--ink); border-radius: 6px; background: var(--wash); color: var(--ink); }
+.shared-settings .settings-save-error p { margin: 0 0 8px; font-weight: 600; font-size: .9em; }
+.shared-settings .settings-save-error button { min-block-size: 44px; }
+@media (max-width: 380px) {
+  .shared-settings :is(.settings-header, .settings-body) { padding-inline: 16px; }
+}
+@media (forced-colors: active) {
+  .shared-settings .settings-save-error { border: 2px solid CanvasText; }
+}

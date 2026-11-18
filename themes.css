@@ -282,19 +282,19 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 
 .help-overview{font-size:14px;line-height:1.5}.help-overview h3{margin:12px 0 8px}.help-overview p{margin:8px 0 12px}.large .help-overview{font-size:17px}
 
-#settings .setting-stacked{display:flex;flex-direction:column;align-items:stretch;gap:6px}#settings .setting-stacked select{width:100%;max-width:100%;min-width:0}
 
-#settings fieldset{border:0;border-top:1px solid var(--line);padding:12px 0 8px;margin:12px 0;min-width:0}
-#settings legend{font-size:13px;font-weight:750;color:var(--accent);padding-inline-end:10px}
-#settings .setting-item{margin:0 0 12px}
-#settings .setting-row{display:flex;align-items:center;gap:4px;min-height:44px}
-#settings .setting-row label{flex:1;min-width:0;cursor:pointer}
-#settings .setting-row input{flex-shrink:0;margin-inline:8px}
-#settings .setting-info{width:44px;height:44px;min-height:44px;padding:0;flex:0 0 44px;border:0;background:transparent;color:var(--accent);font-size:18px}
-#settings .setting-info[aria-expanded="true"]{background:var(--wash)}
-#settings .setting-item>select{width:100%;max-width:100%;min-width:0}
-#settings .setting-description{background:var(--wash);padding:9px 12px;border-radius:8px;margin:5px 0 8px;line-height:1.5}
-#settings .setting-description p{margin:0 0 6px}#settings .setting-description p:last-child{margin-bottom:0}
+
+
+
+
+
+
+
+
+
+
+
+
 
 .game .pool-tray.pool-above{margin-top:0;margin-bottom:8px}
 

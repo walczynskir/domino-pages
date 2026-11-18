@@ -58,6 +58,7 @@
   function save() {
     try { localStorage.setItem(key, JSON.stringify({ version:1, state, prefs, stats, undoHistory })); storageProblem = false; }
     catch { storageProblem = true; }
+    renderSettings();
   }
   const positions = { 0:[], 1:[4], 2:[0,8], 3:[0,4,8], 4:[0,2,6,8], 5:[0,2,4,6,8], 6:[0,2,3,5,6,8] };
   function tileNode(tile, interactive = false, vertical = false) {
@@ -83,7 +84,7 @@
     document.documentElement.lang = prefs.language;
     document.documentElement.dataset.theme = prefs.theme;
     document.body.classList.toggle('large', prefs.large);
-    const map = { 'language-label':'language','theme-label':'theme','new-game':'new','you-label':'you','computer-label':'computer',target:'target','hand-label':'hand',draw:'draw','progress-label':'progress','progress-title':'progressTitle','progress-text':'progressText','wins-label':'wins','matches-label':'matches','match-points-label':'matchPoints','local-note':'local','save-note':'save','settings-title':'settings','starter-label':'starter','alternate-option':'alternate','winner-option':'winner','tie-note':'tie','large-label':'large','progress-toggle-label':'progressToggle','setting-note':'settingNote',done:'done','confirm-title':'confirm','confirm-text':'confirmText',cancel:'cancel','confirm-new':'new' };
+    const map = { 'language-label':'language','theme-label':'theme','new-game':'new','you-label':'you','computer-label':'computer',target:'target','hand-label':'hand',draw:'draw','progress-label':'progress','progress-title':'progressTitle','progress-text':'progressText','wins-label':'wins','matches-label':'matches','match-points-label':'matchPoints','local-note':'local','save-note':'save','settings-title':'settings','starter-label':'starter','alternate-option':'alternate','winner-option':'winner','tie-note':'tie','large-label':'large','progress-toggle-label':'progressToggle','setting-note':'settingNote','confirm-title':'confirm','confirm-text':'confirmText',cancel:'cancel','confirm-new':'new' };
     for (const [id, name] of Object.entries(map)) $(id).textContent = tr(name);
     document.querySelector('.board-zoom-controls').setAttribute('aria-label',prefs.language==='pl'?'Powiększenie planszy':'Board zoom');
     $('table').setAttribute('aria-label',prefs.language==='pl'?'Plansza domino':'Domino board');
@@ -98,7 +99,7 @@
     $('credits-link').textContent = prefs.language === 'pl' ? 'Autorzy i licencje' : 'Credits and licenses';
     $('credits-link').href = `credits.html?lang=${prefs.language}`;
     $('settings-button').setAttribute('aria-label',tr('settings'));
-    $('settings').querySelector('.dialog-heading button').setAttribute('aria-label',tr('done'));
+
     const options = themeOrder.map(value => ({
       value, name: tr('themes')[themes.indexOf(value)], matches: 0
     })).concat(rewardThemes);
@@ -432,6 +433,30 @@
     save(); if (storageProblem) $('save-note').textContent=tr('storage');
     DominoI18n.apply(document.body,prefs.language);
     renderToolbar();
+    renderSettings();
+  }
+  function renderSettings() {
+    const copy = settingsDialogStrings[prefs.language] || settingsDialogStrings.en;
+    $('settings-autosave').textContent = copy.autosave;
+    $('settings-group-0').textContent = tr('computer');
+    $('settings-group-1').textContent = copy.rules;
+    $('settings-group-2').textContent = copy.display;
+    const close = DominoI18n.text('Close', prefs.language);
+    $('settings-dismiss').setAttribute('aria-label', close);
+    $('settings-dismiss').title = close;
+    const error = $('settings-save-error');
+    if (storageProblem && error.hidden) $('settings').querySelector('.settings-body').scrollTop = 0;
+    error.hidden = !storageProblem;
+    $('settings-save-error-text').textContent = copy.error;
+    $('settings-save-retry').textContent = copy.retry;
+    for (const timing of $('settings').querySelectorAll('[data-setting-applies]')) {
+      timing.textContent = copy[timing.dataset.settingApplies];
+    }
+    for (const button of $('settings').querySelectorAll('.setting-info')) {
+      const label = button.closest('.setting-item').querySelector('.setting-name').textContent;
+      button.setAttribute('aria-label', copy.about + label);
+      button.removeAttribute('aria-labelledby');
+    }
   }
   function toolbarButton(id, icon, label) {
     const button = $(id);
@@ -468,7 +493,24 @@
   }
   function fitToolbar() {
     const toolbar = document.querySelector('.game-toolbar');
+    const sidebar = document.body.classList.contains('table-only') &&
+      matchMedia('(orientation: landscape) and (min-width: 600px) and (max-height: 560px)').matches;
+    document.body.classList.toggle('landscape-controls', sidebar);
+    const scoreboard = document.querySelector('.scoreboard');
+    const tools = toolbar.querySelector('.game-tools');
+    const history = $('fullscreen-history');
+    if (sidebar) {
+      if (scoreboard.parentElement !== toolbar) toolbar.prepend(scoreboard);
+      if (history.parentElement !== tools) tools.append(history);
+    } else {
+      if (scoreboard.parentElement === toolbar) document.querySelector('.game').prepend(scoreboard);
+      if (history.parentElement === tools) document.querySelector('.move-feedback').append(history);
+    }
     toolbar.classList.remove('toolbar-compact', 'toolbar-icons', 'toolbar-new-icon', 'toolbar-overflow');
+    if (sidebar) {
+      toolbar.classList.add('toolbar-compact', 'toolbar-icons');
+      return;
+    }
     const style = getComputedStyle(toolbar);
     const available = toolbar.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
     const required = () => $('new-game').getBoundingClientRect().width +
@@ -568,7 +610,6 @@
     };
     settings.addEventListener('keydown', event => {
       if (event.key !== 'Escape' || description.hidden) return;
-      event.preventDefault();
       pinned = false;
       expand(false);
     });
@@ -577,6 +618,11 @@
       expand(false);
     });
   }
+  $('settings-dismiss').onclick = () => settings.close();
+  settings.addEventListener('close', () => {
+    if (!settings.open) $('settings-button').focus({preventScroll:true});
+  });
+  $('settings-save-retry').onclick = save;
   document.querySelector('.move-feedback').append($('fullscreen-history'));
   const fullscreenButton = $('fullscreen');
   const historyDrawer = $('history-drawer');
