@@ -21,8 +21,9 @@
   const themeAvailable = value => themes.includes(value) ||
     rewardThemes.some(reward => reward.value === value && stats.completedMatches >= reward.matches);
   const key = 'domino-save-v1';
-  let prefs = { language:'pl', theme:'classic', large:false, progress:true, starter:'alternate', previousTheme:'classic', mustDraw:true, requireDeclaration:true, history:false, openingDoublesOnly:true, declarationPenalty:'three', aiDifficulty:'medium' };
+  let prefs = { language:'pl', theme:'classic', large:false, progress:true, starter:'alternate', previousTheme:'classic', mustDraw:true, requireDeclaration:true, history:false, openingDoublesOnly:true, declarationPenalty:'three', aiDifficulty:'medium', undoEnabled:false };
   let stats = { matches:0, wins:0, points:0, opponentPoints:0 }, state, selected = null, declaredMove = null, timer = null, storageProblem = false;
+  let undoHistory = null;
   let boardZoom=1, pendingDrop=null;
   let viewZoom = null, drag = null, boardKey = null, draggedTile = null, tileDrag = null, suppressTileClickUntil = 0;
   const tr = name => dictionary[prefs.language][name];
@@ -32,7 +33,7 @@
       const saved = JSON.parse(raw);
       if (saved.version !== 1 || !saved.state || saved.state.version !== 1) throw new Error('Version');
       if (!Array.isArray(saved.state.hands) || saved.state.hands.length !== 2 || !Array.isArray(saved.state.pool) || !Array.isArray(saved.state.scores)) throw new Error('State');
-      state = saved.state; prefs = { ...prefs, ...saved.prefs }; stats = { ...stats, ...saved.stats };
+      state = saved.state; undoHistory = saved.undoHistory; prefs = { ...prefs, ...saved.prefs }; stats = { ...stats, ...saved.stats };
     }
   } catch { storageProblem = true; }
   stats.completedMatches ??= stats.matches;
@@ -53,8 +54,9 @@
   for (const round of state.roundHistory || []) if (round.scores) round.scores = round.scores.map(score => Math.min(150, score));
   G.repairEmptyHandTie(state);
   DominoResults.prepare(state, stats);
+  undoHistory = prefs.undoEnabled ? DominoUndo.load(state, undoHistory) : DominoUndo.create(state);
   function save() {
-    try { localStorage.setItem(key, JSON.stringify({ version:1, state, prefs, stats })); storageProblem = false; }
+    try { localStorage.setItem(key, JSON.stringify({ version:1, state, prefs, stats, undoHistory })); storageProblem = false; }
     catch { storageProblem = true; }
   }
   const positions = { 0:[], 1:[4], 2:[0,8], 3:[0,4,8], 4:[0,2,6,8], 5:[0,2,4,6,8], 6:[0,2,3,5,6,8] };
@@ -166,7 +168,7 @@
   function playSelected(arm, declare = declaredMove === selected) {
     if(!selectedMoves().some(move=>move.arm===arm)) return;
     releaseBoardPan();
-    G.play(state,selected,arm,declare);
+    DominoUndo.action(state, undoHistory, prefs.undoEnabled, () => G.play(state,selected,arm,declare));
     selected=null;declaredMove=null;draggedTile=null;
     render();schedule();
   }
@@ -429,7 +431,56 @@
     $('badges').replaceChildren(...[[stats.wins>=1,'badgeFirst'],[stats.wins>=5,'badgeFive'],[stats.completedMatches>=10,'badgeTen']].filter(([ok])=>ok).map(([,label])=>{const badge=document.createElement('span');badge.className='badge';badge.textContent=tr(label);return badge;}));
     save(); if (storageProblem) $('save-note').textContent=tr('storage');
     DominoI18n.apply(document.body,prefs.language);
+    renderToolbar();
   }
+  function toolbarButton(id, icon, label) {
+    const button = $(id);
+    button.setAttribute('aria-label', label);
+    button.title = label;
+    const symbol = document.createElement('span');
+    symbol.className = 'toolbar-icon' + (id === 'fullscreen' ? ' fullscreen-icon' : '');
+    symbol.setAttribute('aria-hidden', 'true');
+    symbol.setAttribute('translate', 'no');
+    symbol.textContent = icon;
+    const text = document.createElement('span');
+    text.className = 'toolbar-label' + (id === 'fullscreen' ? ' fullscreen-label' : '');
+    text.textContent = label;
+    button.replaceChildren(symbol, text);
+  }
+  function renderToolbar() {
+    for (const [id, source, icon, entries] of [
+      ['undo', 'Undo', '↶', undoHistory.past],
+      ['redo', 'Redo', '↷', undoHistory.future]
+    ]) {
+      toolbarButton(id, icon, DominoI18n.text(source, prefs.language));
+      $(id).hidden = !prefs.undoEnabled;
+      $(id).disabled = !entries.length;
+    }
+    $('undo-enabled').checked = !!prefs.undoEnabled;
+    toolbarButton('new-game', '+', prefs.language === 'pl' ? 'Nowa gra' : tr('new'));
+    toolbarButton('help-button', '?', $('help-button').textContent);
+    $('fullscreen-history').textContent = '☰';
+    $('fullscreen-history').setAttribute('aria-label', DominoI18n.text('Game history', prefs.language));
+    $('fullscreen-history').title = DominoI18n.text('Game history', prefs.language);
+    const full = document.body.classList.contains('table-only');
+    toolbarButton('fullscreen', '⛶', DominoI18n.text(full ? 'Exit full screen' : 'Full screen', prefs.language));
+    fitToolbar();
+  }
+  function fitToolbar() {
+    const toolbar = document.querySelector('.game-toolbar');
+    toolbar.classList.remove('toolbar-compact', 'toolbar-icons', 'toolbar-new-icon', 'toolbar-overflow');
+    const style = getComputedStyle(toolbar);
+    const available = toolbar.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+    const required = () => $('new-game').getBoundingClientRect().width +
+      toolbar.querySelector('.game-tools').getBoundingClientRect().width + 8;
+    if (required() > available) toolbar.classList.add('toolbar-compact');
+    if (required() > available) toolbar.classList.add('toolbar-icons');
+    if (required() > available) toolbar.classList.add('toolbar-new-icon');
+    if (required() > available) toolbar.classList.add('toolbar-overflow');
+  }
+  window.addEventListener('resize', fitToolbar);
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(fitToolbar).observe(document.querySelector('.game-column'));
+
   function schedule() {
     clearTimeout(timer);
     if (state.turn !== 1 || state.roundResult || state.matchWinner !== null) return;
@@ -442,26 +493,42 @@
   $('draw').onclick = event => {
     selected = null;
     declaredMove = null;
-    if (state.pool.length > 2) selected = G.draw(state).mustPlay || null;
-    else G.pass(state);
+    if (state.pool.length > 2) selected = DominoUndo.action(state, undoHistory, prefs.undoEnabled, () => G.draw(state)).mustPlay || null;
+    else DominoUndo.action(state, undoHistory, prefs.undoEnabled, () => G.pass(state));
     render();
     if (selected && event.detail === 0) $('choices').querySelector('button')?.focus();
     schedule();
   };
-  $('optional-pass').onclick=()=>{G.pass(state);selected=null;declaredMove=null;render();schedule();};
+  $('optional-pass').onclick=()=>{DominoUndo.action(state, undoHistory, prefs.undoEnabled, () => G.pass(state));selected=null;declaredMove=null;render();schedule();};
+  $('undo-enabled').onchange = event => {
+    prefs.undoEnabled = event.target.checked;
+    undoHistory = DominoUndo.create(state);
+    render();
+  };
+  for (const direction of ['undo', 'redo']) {
+    $(direction).onclick = () => {
+      if (!prefs.undoEnabled || $(direction).disabled) return;
+      clearTimeout(timer);
+      state = DominoUndo.restore(state, undoHistory, direction, stats.results[state.matchId]);
+      selected = null; declaredMove = null; pendingDrop = null;
+      releaseBoardPan();
+      render(); schedule();
+    };
+  }
   $('opening-doubles-only').onchange=e=>{prefs.openingDoublesOnly=e.target.checked;state.settings.openingDoublesOnly=prefs.openingDoublesOnly;render();};
   $('difficulty').onchange=e=>{prefs.aiDifficulty=e.target.value;state.settings.aiDifficulty=prefs.aiDifficulty;render();};
   $('require-declaration').onchange=e=>{prefs.requireDeclaration=!e.target.checked;state.settings.requireDeclaration=prefs.requireDeclaration;declaredMove=null;render();};
   $('declaration-penalty').onchange=e=>{prefs.declarationPenalty=e.target.value;state.settings.declarationPenalty=prefs.declarationPenalty;render();};
   $('must-draw').onchange=e=>{prefs.mustDraw=e.target.checked;state.settings.mustDraw=prefs.mustDraw;render();};
-  $('continue').onclick=()=>{clearTimeout(timer);if(state.matchWinner!==null){state=G.nextMatch(state);state.settings.roundStarter=prefs.starter;state.settings.aiDifficulty=prefs.aiDifficulty;state.settings.declarationPenalty=prefs.declarationPenalty;state.settings.mustDraw=prefs.mustDraw;state.settings.requireDeclaration=prefs.requireDeclaration;state.settings.openingDoublesOnly=prefs.openingDoublesOnly;}else G.nextRound(state);selected=null;declaredMove=null;render();schedule();};
+  $('continue').onclick=()=>{clearTimeout(timer);if(state.matchWinner!==null){state=G.nextMatch(state);undoHistory=DominoUndo.create(state);state.settings.roundStarter=prefs.starter;state.settings.aiDifficulty=prefs.aiDifficulty;state.settings.declarationPenalty=prefs.declarationPenalty;state.settings.mustDraw=prefs.mustDraw;state.settings.requireDeclaration=prefs.requireDeclaration;state.settings.openingDoublesOnly=prefs.openingDoublesOnly;}else G.nextRound(state);selected=null;declaredMove=null;render();schedule();};
   function replaceMatch() {
     clearTimeout(timer);
     try {
       const replacement = DominoResults.replace(state, stats, starter =>
         G.create(Math.random, starter, {roundStarter:prefs.starter,mustDraw:prefs.mustDraw,requireDeclaration:prefs.requireDeclaration,aiDifficulty:prefs.aiDifficulty,declarationPenalty:prefs.declarationPenalty,openingDoublesOnly:prefs.openingDoublesOnly}),
-        (nextState, nextStats) => localStorage.setItem(key, JSON.stringify({version:1,state:nextState,prefs,stats:nextStats})));
+        (nextState, nextStats) => localStorage.setItem(key, JSON.stringify({version:1,state:nextState,prefs,stats:nextStats,undoHistory:DominoUndo.create(nextState)})));
       state = replacement.state; stats = replacement.stats;
+      undoHistory = DominoUndo.create(state);
       selected = null; declaredMove = null;
       $('confirm').close(); render(); schedule();
     } catch {
@@ -510,6 +577,7 @@
       expand(false);
     });
   }
+  document.querySelector('.move-feedback').append($('fullscreen-history'));
   const fullscreenButton = $('fullscreen');
   const historyDrawer = $('history-drawer');
   const historyPanel = $('history-panel');
@@ -528,12 +596,7 @@
     if (document.body.classList.contains('table-only') === open) return;
     if (open) gameScrollY = window.scrollY;
     document.body.classList.toggle('table-only', open);
-    const scoreboard = document.querySelector('.scoreboard');
-    if (open) document.querySelector('.game-tools').before(scoreboard);
-    else {
-      if (historyDrawer.open) historyDrawer.close();
-      document.querySelector('.game').prepend(scoreboard);
-    }
+    if (!open && historyDrawer.open) historyDrawer.close();
     fullscreenButton.setAttribute('aria-pressed', String(open));
     const label = open ? 'Exit full screen' : 'Full screen';
     fullscreenButton.setAttribute('aria-label', label);
@@ -543,6 +606,7 @@
     balanceHand("opponent-hand");
     balanceHand("hand");
     window.scrollTo(0, open ? 0 : gameScrollY);
+    fitToolbar();
   }
   async function exitTableOnly() {
     if (document.fullscreenElement === document.documentElement) {

@@ -231,7 +231,8 @@
     while (samples.length < sampleCount) samples.push(E.shuffle(unseen, random));
 
     const depth = s.pool.length <= 2 ? Math.min(10, hand.length + opponentCount + 2) : 2;
-    const deadline = grandmaster ? performance.now() + 45 : Infinity;
+    // A fixed sample/node budget keeps analysis independent of CPU contention.
+    // Each candidate receives the same forty sampled hands and search allowance.
     for (const bag of samples) {
       for (const move of candidates) {
         const hands = [];
@@ -264,7 +265,6 @@
         const mobility = new Set(legal(trial, player).map(move => move.id)).size;
         move.rank += points + terminal + mobility * 1.25 + (hands[opponent].length - hands[player].length) * 1.5 - E.sum(hands[player]) * 0.12;
       }
-      if (grandmaster && performance.now() >= deadline) break;
     }
     const best = candidates.sort((a, b) => b.rank - a.rank)[0];
     return { ...best, declared: best.points > 0 };
