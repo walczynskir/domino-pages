@@ -9,3 +9,8 @@
 .shared-settings .setting-description p:last-child { margin-bottom: 0; }
 .shared-settings .setting-description ul { padding-inline-start: 20px; margin: 0; }
 .shared-settings .settings-body > fieldset { flex-shrink: 0; }
+
+.backup-actions { display:flex; flex-wrap:wrap; gap:8px; margin-block:12px; }
+.backup-actions button { min-height:44px; min-width:44px; white-space:normal; overflow-wrap:anywhere; }
+#confirm-backup p { overflow-wrap:anywhere; }
+#backup-close { flex-shrink:0; width:44px; height:44px; padding:0; }

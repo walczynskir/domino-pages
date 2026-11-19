@@ -19,7 +19,7 @@
     { value: 'night-sky', name: 'Night sky', matches: 10 }
   ];
   const themeAvailable = value => themes.includes(value) ||
-    rewardThemes.some(reward => reward.value === value && stats.completedMatches >= reward.matches);
+    rewardThemes.some(reward => reward.value === value && (stats.completedMatches >= reward.matches || stats.unlockedThemes?.includes(value)));
   const key = 'domino-save-v1';
   let prefs = { language:'pl', theme:'classic', large:false, progress:true, starter:'alternate', previousTheme:'classic', mustDraw:true, requireDeclaration:true, history:false, openingDoublesOnly:true, declarationPenalty:'three', aiDifficulty:'medium', undoEnabled:false };
   let stats = { matches:0, wins:0, points:0, opponentPoints:0 }, state, selected = null, declaredMove = null, timer = null, storageProblem = false;
@@ -46,15 +46,24 @@
   state.settings.requireDeclaration = state.settings.requireDeclaration !== false;
   state.settings.openingDoublesOnly = state.settings.openingDoublesOnly !== false;
   if (!['easy','medium','hard','expert','grandmaster'].includes(state.settings.aiDifficulty)) state.settings.aiDifficulty = 'medium';
-  prefs.aiDifficulty = state.settings.aiDifficulty;
+  prefs.aiDifficulty ??= state.settings.aiDifficulty;
   state.settings.declarationPenalty ||= 'three';
   state.declarationErrors ||= [0,0];
-  prefs.declarationPenalty = state.settings.declarationPenalty;
+  prefs.declarationPenalty ??= state.settings.declarationPenalty;
   state.scores = state.scores.map(score => Math.min(150, score));
   for (const round of state.roundHistory || []) if (round.scores) round.scores = round.scores.map(score => Math.min(150, score));
   G.repairEmptyHandTie(state);
   DominoResults.prepare(state, stats);
-  undoHistory = prefs.undoEnabled ? DominoUndo.load(state, undoHistory) : DominoUndo.create(state);
+  undoHistory = DominoUndo.load(state, undoHistory);
+  const backupAdapter = DominoProgressBackup;
+  const backupSchema = backupAdapter.schema(DominoI18n.languages);
+  backupSchema.readLegacy = value => {
+    const candidate = backupAdapter.readLegacy(value,prefs,DominoI18n.languages);
+    // Apply the same complete preference validation as the portable envelope.
+    GamesChestPreferences.stringify(candidate.preferences,backupSchema);
+    return candidate;
+  };
+  let backupMessage = '', backupSkipped = '', pendingBackup = null, backupRead = 0;
   function save() {
     try { localStorage.setItem(key, JSON.stringify({ version:1, state, prefs, stats, undoHistory })); storageProblem = false; }
     catch { storageProblem = true; }
@@ -120,14 +129,14 @@
     $('contrast').setAttribute('aria-pressed', String(prefs.theme === 'contrast'));
     document.querySelector('meta[name="theme-color"]').content = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim(); $('language').value = prefs.language;
     $('difficulty-label').textContent = prefs.language === 'pl' ? 'Poziom komputera' : 'Computer skill';
-    $('difficulty').value = state.settings.aiDifficulty;
+    $('difficulty').value = prefs.aiDifficulty;
     for (const [value,pl,en] of [['easy','Początkujący','Beginner'],['medium','Średni','Intermediate'],['hard','Zaawansowany','Advanced'],['expert','Ekspert','Expert'],['grandmaster','Arcymistrz','Grandmaster']]) $('difficulty').querySelector(`[value="${value}"]`).textContent = prefs.language === 'pl' ? pl : en;
-    $('require-declaration').checked = !state.settings.requireDeclaration;
+    $('require-declaration').checked = !prefs.requireDeclaration;
     $('declaration-penalty').disabled = !state.settings.requireDeclaration;
     $('declaration-label').textContent = prefs.language === 'pl' ? 'Automatyczne meldowanie' : 'Automatic declarations';
     $('declaration-note').textContent = prefs.language === 'pl' ? (state.settings.requireDeclaration ? 'Wyłączone: meldujesz sam przed dołożeniem. Po zapomnianym meldunku zobaczysz informację o utraconych punktach. Błędny meldunek liczy się po wyłożeniu kości; licznik zeruje się w nowej partii.' : 'Włączone: punkty naliczają się automatycznie, bez meldowania i bez kar za błędne meldunki. Dobry wybór na początek.') : (state.settings.requireDeclaration ? 'Off: declare before placing a tile. A reminder after the move shows any points lost. False declarations count after placement; the counter resets in a new game.' : 'On: points are awarded automatically, with no declarations or false declaration penalties. A good choice for beginners.');
     $('penalty-label').textContent = prefs.language === 'pl' ? 'Kara za błędny meldunek' : 'False declaration penalty';
-    $('declaration-penalty').value = state.settings.declarationPenalty;
+    $('declaration-penalty').value = prefs.declarationPenalty;
     for (const [value,pl,en] of [['none','Bez kary','No penalty'],['five','Odejmij 5 punktów','Deduct 5 points'],['three','3 błędy = przegrana partia','3 errors = game lost']]) $('declaration-penalty').querySelector(`[value="${value}"]`).textContent = prefs.language === 'pl' ? pl : en;
     $('declaration-errors').hidden = !state.settings.requireDeclaration || state.settings.declarationPenalty === 'none';
     const errors = state.declarationErrors[0];
@@ -138,10 +147,10 @@
     $('declaration-errors').classList.toggle('penalty-warning',errors >= 2);
     $('penalty-note').hidden = !state.settings.requireDeclaration || state.settings.declarationPenalty !== 'five';
     $('penalty-note').textContent = DominoI18n.text('After the penalty, your score cannot be lower than 0.',prefs.language);
-    $('must-draw').checked = state.settings.mustDraw;
+    $('must-draw').checked = prefs.mustDraw;
     $('must-draw-label').textContent = prefs.language === 'pl' ? 'Obowiązkowe dobieranie' : 'Mandatory drawing';
     $('must-draw-note').textContent = prefs.language === 'pl' ? 'Przy braku ruchu musisz dobrać do 2 kości. Wyłączenie pozwala spasować bez dobierania. Zmiana działa od razu.' : 'Without a move, draw up to 2 tiles. Turn off to allow passing without drawing. Applies immediately.';
-    $('opening-doubles-only').checked = state.settings.openingDoublesOnly;
+    $('opening-doubles-only').checked = prefs.openingDoublesOnly;
     $('opening-rule-label').textContent = prefs.language === 'pl' ? 'Otwarcie punktuje tylko dubletem (5–5)' : 'Opening scores only with a double (5–5)';
     $('history-toggle').checked = prefs.history === true;
     $('history-toggle-label').textContent = prefs.language === 'pl' ? 'Historia rozgrywki' : 'Game history';
@@ -429,13 +438,14 @@
     const gamesLabel = prefs.language === 'pl' ? 'Partie' : 'Games';
     $('match-total-compact').textContent = `${gamesLabel} ${stats.points}:${stats.opponentPoints}`;
     $('wins').textContent = stats.wins; $('matches').textContent = stats.matches; $('match-points').textContent = stats.points;
-    $('badges').replaceChildren(...[[stats.wins>=1,'badgeFirst'],[stats.wins>=5,'badgeFive'],[stats.completedMatches>=10,'badgeTen']].filter(([ok])=>ok).map(([,label])=>{const badge=document.createElement('span');badge.className='badge';badge.textContent=tr(label);return badge;}));
+    $('badges').replaceChildren(...[[stats.wins>=1||stats.achievements?.includes('badgeFirst'),'badgeFirst'],[stats.wins>=5||stats.achievements?.includes('badgeFive'),'badgeFive'],[stats.completedMatches>=10||stats.achievements?.includes('badgeTen'),'badgeTen']].filter(([ok])=>ok).map(([,label])=>{const badge=document.createElement('span');badge.className='badge';badge.textContent=tr(label);return badge;}));
     save(); if (storageProblem) $('save-note').textContent=tr('storage');
     DominoI18n.apply(document.body,prefs.language);
     renderToolbar();
     renderSettings();
   }
   function renderSettings() {
+    renderBackup();
     const copy = settingsDialogStrings[prefs.language] || settingsDialogStrings.en;
     $('settings-autosave').textContent = copy.autosave;
     $('settings-group-0').textContent = tr('computer');
@@ -450,7 +460,9 @@
     $('settings-save-error-text').textContent = copy.error;
     $('settings-save-retry').textContent = copy.retry;
     for (const timing of $('settings').querySelectorAll('[data-setting-applies]')) {
-      timing.textContent = copy[timing.dataset.settingApplies];
+      const pendingRules = {difficulty:'aiDifficulty','must-draw':'mustDraw','opening-doubles-only':'openingDoublesOnly','require-declaration':'requireDeclaration','declaration-penalty':'declarationPenalty'};
+      const control=timing.closest('label')?.htmlFor, option=pendingRules[control];
+      timing.textContent = copy[option && prefs[option]!==state.settings[option] ? 'next' : timing.dataset.settingApplies];
     }
     for (const button of $('settings').querySelectorAll('.setting-info')) {
       const label = button.closest('.setting-item').querySelector('.setting-name').textContent;
@@ -458,6 +470,76 @@
       button.removeAttribute('aria-labelledby');
     }
   }
+  function backupCopy() { return progressTransferStrings[prefs.language] || progressTransferStrings.en; }
+  function backupError(code) {
+    const copy=preferencesTransferStrings[prefs.language]||preferencesTransferStrings.en;
+    return copy[{invalid:8,game:9,version:10,read:11,write:12,export:13}[code]||8];
+  }
+  function renderBackup() {
+    const copy=backupCopy();
+    for(const [id,index]of [['backup-heading',0],['export-backup',1],['import-backup',2],['backup-scope',3]]) $(id).textContent=copy[index];
+    $('backup-status').textContent=backupMessage==='success'?copy[4]+(backupSkipped?' '+(preferencesTransferStrings[prefs.language]||preferencesTransferStrings.en)[backupSkipped==='locked'?6:7]:''):backupMessage?backupError(backupMessage):'';
+  }
+  function backupPlan(candidate) {
+    const merged=backupAdapter.merge(backupAdapter.read(stats),candidate);
+    const imported=GamesChestPreferences.resolveTheme(candidate.preferences,
+      prefs.theme==='contrast'?prefs.previousTheme:prefs.theme,
+      id=>themes.includes(id)&&id!=='contrast'||rewardThemes.some(r=>r.value===id),
+      id=>!rewardThemes.some(r=>r.value===id)||merged.unlockedThemes.includes(id));
+    return {merged,imported};
+  }
+  $('export-backup').onclick=()=>{
+    try {
+      const text=GamesChestBackup.stringify(backupAdapter.exportPreferences(prefs),backupAdapter.read(stats),backupSchema);
+      const url=URL.createObjectURL(new Blob([text],{type:'application/json'}));
+      const link=document.createElement('a');link.href=url;link.download='domino-backup.json';link.click();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);backupMessage='';
+    } catch {backupMessage='export';}renderBackup();
+  };
+  $('import-backup').onclick=()=>{$('backup-file').value='';$('backup-file').click();};
+  $('backup-file').onchange=async()=>{
+    const file=$('backup-file').files[0], read=++backupRead;if(!file)return;
+    backupMessage='';renderBackup();
+    clearTimeout(timer);
+    try {
+      if(file.size>GamesChestBackup.maxBytes)throw Object.assign(Error(),{code:'invalid'});
+      let text;try{text=await file.text();}catch{throw Object.assign(Error(),{code:'read'});}
+      if(read!==backupRead||!$('settings').open)return;
+      const candidate=GamesChestBackup.parse(text,backupSchema),plan=backupPlan(candidate),copy=backupCopy();
+      pendingBackup=candidate;
+      $('backup-title').textContent=copy[5];$('backup-description').textContent=copy[6];
+      const before=stats,after=plan.merged;
+      $('backup-totals').textContent=copy[12]+': '+[
+        DominoI18n.text(tr('matches'),prefs.language)+' '+before.matches+' / '+after.matches,copy[9]+' '+before.wins+' / '+after.wins,
+        copy[10]+' '+(before.matches-before.wins)+' / '+(after.matches-after.wins),
+        DominoI18n.text(tr('matchPoints'),prefs.language)+' '+before.points+':'+before.opponentPoints+' / '+after.points+':'+after.opponentPoints,
+        copy[11]+' '+backupAdapter.read(stats).unlockedThemes.length+' / '+after.unlockedThemes.length,
+        dominoBackupExtra[prefs.language][0]+' '+before.completedMatches+' / '+after.completedMatches,
+        dominoBackupExtra[prefs.language][1]+' '+backupAdapter.read(stats).achievements.length+' / '+after.achievements.length].join(' · ');
+      $('backup-note').textContent=[candidate.legacy?copy[13]:'',dominoBackupExtra[prefs.language][2],plan.imported.skipped?(preferencesTransferStrings[prefs.language]||preferencesTransferStrings.en)[plan.imported.skipped==='locked'?6:7]:''].filter(Boolean).join(' ');
+      $('backup-cancel').textContent=copy[7];$('backup-restore').textContent=copy[8];
+      $('backup-close').setAttribute('aria-label',DominoI18n.text('Close',prefs.language));
+      $('backup-error').hidden=true;$('confirm-backup').showModal();
+    }catch(e){backupMessage=e.code||'invalid';renderBackup();}
+  };
+  $('backup-cancel').onclick=$('backup-close').onclick=()=>$('confirm-backup').close();
+  // Handle the nested confirmation explicitly so one Escape never closes both dialogs.
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&$('confirm-backup').open){event.preventDefault();event.stopImmediatePropagation();$('confirm-backup').close();}
+  },true);
+  $('confirm-backup').addEventListener('cancel',event=>{event.preventDefault();event.stopPropagation();$('confirm-backup').close();});
+
+  $('confirm-backup').addEventListener('close',()=>{pendingBackup=null;$('import-backup').focus({preventScroll:true});});
+  $('backup-restore').onclick=()=>{
+    if(!pendingBackup)return;
+    try {
+      const plan=backupPlan(pendingBackup);
+      const next=backupAdapter.persist(localStorage,key,{version:1,state,prefs,stats,undoHistory},
+        {...pendingBackup,preferences:plan.imported.preferences});
+      stats=next.stats;prefs=next.prefs;storageProblem=false;backupMessage='success';backupSkipped=plan.imported.skipped||'';
+      $('confirm-backup').close();render();
+    }catch{ $('backup-error').textContent=backupError('write');$('backup-error').hidden=false; }
+  };
   function toolbarButton(id, icon, label) {
     const button = $(id);
     button.setAttribute('aria-label', label);
@@ -525,7 +607,7 @@
 
   function schedule() {
     clearTimeout(timer);
-    if (state.turn !== 1 || state.roundResult || state.matchWinner !== null) return;
+    if ($('settings').open || $('confirm-backup').open || state.turn !== 1 || state.roundResult || state.matchWinner !== null) return;
     timer = setTimeout(() => {
       const move = G.choose(state);
       if (move) G.play(state,move.id,move.arm,move.declared); else G.draw(state);
@@ -620,7 +702,7 @@
   }
   $('settings-dismiss').onclick = () => settings.close();
   settings.addEventListener('close', () => {
-    if (!settings.open) $('settings-button').focus({preventScroll:true});
+    if (!settings.open) { backupRead++; $('settings-button').focus({preventScroll:true}); schedule(); }
   });
   $('settings-save-retry').onclick = save;
   document.querySelector('.move-feedback').append($('fullscreen-history'));
@@ -677,7 +759,7 @@
     exitTableOnly();
     fullscreenButton.focus();
   });
-  $('settings-button').onclick=()=>$('settings').showModal();
+  $('settings-button').onclick=()=>{clearTimeout(timer);$('settings').showModal();};
   $('language').onchange=e=>{prefs.language=e.target.value;render();};
   $('theme').onchange=e=>{if(!themeAvailable(e.target.value))return;prefs.theme=e.target.value;prefs.previousTheme=prefs.theme;render();};
   $('contrast').onclick=()=>{if(prefs.theme==='contrast')prefs.theme=prefs.previousTheme;else{prefs.previousTheme=prefs.theme;prefs.theme='contrast';}render();};
