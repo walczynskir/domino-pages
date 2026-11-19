@@ -1,5 +1,5 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.10.0';
+const cacheName = cachePrefix + '1.10.1';
 const scope = self.registration.scope;
 const assetNames = [
   'shared-preferences.js', 'shared-progress-backup.js', 'progress-backup.js', 'preferences-strings.js',
@@ -8,7 +8,7 @@ const assetNames = [
   'undo.js', 'results.js', 'game.js', 'games-chest-menu.css', 'games-chest-menu.js', 'garden.webp',
   'help.js', 'history.js', 'i18n.js', 'icon-192.png',
   'icon-512.png', 'icon-maskable.png', 'index.html', 'locales.js',
-  'logo.svg', 'manifest.webmanifest', 'settings-gear.svg', 'shared-game.css',
+  'logo.png', 'favicon-16.png', 'favicon-32.png', 'logo.svg', 'manifest.webmanifest', 'settings-gear.svg', 'shared-game.css',
   'shared-palettes.css',
   'shared-victory.css', 'shared-victory.js', 'style.css', 'themes.css',
   'shared-settings.css', 'settings.css', 'settings-strings.js', 'toolbar.css', 'version.json',

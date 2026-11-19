@@ -13,7 +13,20 @@
   const en = {
     back:'← Back to domino', title:'Credits and licenses', author:'Project author', role:'Idea, development and project direction.', support:'Creation support', codex:'Developed with the help of OpenAI Codex.', components:'Third-party libraries', none:'None — the app does not use additional libraries.', own:'The domino engine, computer opponent and interface are original parts of this project. The app uses system fonts; no third-party libraries or font files are bundled.', license:'Application license', licenseNote:'No license has been selected for the original application code yet. Public access to the game does not grant a license to the code.'
   };
+  const logoCredit = {
+    pl:'Logo z dwiema kośćmi na zielonym suknie wygenerowano z pomocą OpenAI pod kierunkiem autora projektu.',
+    en:'The two-domino logo on green felt was generated with OpenAI under the project author’s direction.',
+    es:'El logotipo de dos fichas sobre fieltro verde se generó con OpenAI bajo la dirección del autor del proyecto.',
+    de:'Das Logo mit zwei Dominosteinen auf grünem Filz wurde mit OpenAI unter Leitung des Projektautors erstellt.',
+    fr:'Le logo de deux dominos sur feutre vert a été généré avec OpenAI sous la direction de l’auteur du projet.',
+    it:'Il logo con due tessere sul panno verde è stato generato con OpenAI sotto la direzione dell’autore del progetto.',
+    uk:'Логотип із двома кісточками на зеленому сукні створено за допомогою OpenAI під керівництвом автора проєкту.',
+    ar:'أُنشئ شعار قطعتي الدومينو على اللباد الأخضر بمساعدة OpenAI وتحت إشراف مؤلف المشروع.',
+    hi:'हरे कपड़े पर दो डोमिनो वाला लोगो परियोजना के लेखक के निर्देशन में OpenAI की मदद से बनाया गया।',
+    'zh-Hans':'绿色毛毡上两块骨牌的标志由项目作者指导，借助 OpenAI 生成。'
+  };
   function render() {
+    document.querySelector('#logo-credit').textContent = logoCredit[language] || logoCredit.en;
     document.documentElement.lang = language;
     document.title = `${language === 'pl' ? pl.title : en.title} · Domino`;
     document.querySelector('#credits-language').value = language;

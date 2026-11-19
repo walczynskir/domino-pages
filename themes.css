@@ -1156,3 +1156,7 @@ html[dir="rtl"] .eyebrow{letter-spacing:normal}
 :is([data-theme="classic"], [data-theme="garden"]) .placement-target.placement-declare {
   background: #fff0b9;
 }
+
+/* Approved felt logo: fixed aspect ratio, independent of palette colors. */
+header .brand-logo { width:44px; height:44px; flex:0 0 44px; object-fit:contain; border-radius:8px; }
+@media(max-width:640px) { header .brand-logo { width:36px; height:36px; flex-basis:36px; border-radius:7px; } }
