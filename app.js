@@ -581,16 +581,19 @@
     const scoreboard = document.querySelector('.scoreboard');
     const tools = toolbar.querySelector('.game-tools');
     const history = $('fullscreen-history');
+    const picker = $('game-picker-button');
     if (sidebar) {
+      if ($('redo').nextElementSibling !== picker) $('redo').after(picker);
       if (scoreboard.parentElement !== toolbar) toolbar.prepend(scoreboard);
       if (history.parentElement !== tools) tools.append(history);
     } else {
+      if (tools.firstElementChild !== picker) tools.prepend(picker);
       if (scoreboard.parentElement === toolbar) document.querySelector('.game').prepend(scoreboard);
       if (history.parentElement === tools) document.querySelector('.move-feedback').append(history);
     }
-    toolbar.classList.remove('toolbar-compact', 'toolbar-icons', 'toolbar-new-icon', 'toolbar-overflow');
+    toolbar.classList.remove('toolbar-compact', 'toolbar-icons', 'toolbar-new-icon', 'toolbar-picker-icon', 'toolbar-overflow');
     if (sidebar) {
-      toolbar.classList.add('toolbar-compact', 'toolbar-icons');
+      toolbar.classList.add('toolbar-compact', 'toolbar-icons', 'toolbar-picker-icon');
       return;
     }
     const style = getComputedStyle(toolbar);
@@ -600,9 +603,11 @@
     if (required() > available) toolbar.classList.add('toolbar-compact');
     if (required() > available) toolbar.classList.add('toolbar-icons');
     if (required() > available) toolbar.classList.add('toolbar-new-icon');
+    if (required() > available) toolbar.classList.add('toolbar-picker-icon');
     if (required() > available) toolbar.classList.add('toolbar-overflow');
   }
   window.addEventListener('resize', fitToolbar);
+  document.querySelector('#game-picker-button').addEventListener('game-picker-label-change', fitToolbar);
   if (typeof ResizeObserver !== 'undefined') new ResizeObserver(fitToolbar).observe(document.querySelector('.game-column'));
 
   function schedule() {

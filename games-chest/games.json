@@ -1,0 +1,37 @@
+[
+  {
+    "id": "sudoku",
+    "url": "https://rsudoku.pl/",
+    "pl": "Sudoku",
+    "en": "Sudoku",
+    "icon": "sudoku-logo.svg"
+  },
+  {
+    "id": "domino",
+    "url": "https://domino.games-chest.com/",
+    "pl": "Domino",
+    "en": "Domino",
+    "icon": "domino-logo.svg"
+  },
+  {
+    "id": "eight-aces",
+    "url": "https://eightaces.games-chest.com/",
+    "pl": "Osiem Asów",
+    "en": "Eight Aces",
+    "icon": "eightaces-icon.png"
+  },
+  {
+    "id": "garibaldka",
+    "url": "https://garibaldka.games-chest.com/",
+    "pl": "Garibaldka",
+    "en": "Russian Bank",
+    "icon": "garibaldka-icon.png"
+  },
+  {
+    "id": "piec-w-rzedzie",
+    "url": "https://gomoku.walczynskir.chatgpt.site/",
+    "pl": "Gomoku",
+    "en": "Gomoku",
+    "icon": "gomoku-icon.png"
+  }
+]

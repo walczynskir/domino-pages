@@ -16,3 +16,50 @@
   color: #244938;
 }
 .games-chest-menu .all-games { color: inherit; }
+
+#game-picker {
+  inline-size: min(32rem, calc(100% - 24px));
+  max-block-size: calc(100% - 24px);
+  overflow: auto;
+}
+.game-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.game-picker-header h2 { margin: 0; }
+#game-picker-close {
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding: 0;
+  font-size: 1.35em;
+}
+#game-picker h3 { margin: .6em 0 .3em; }
+#game-picker ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin: .5em 0;
+  padding: 0;
+  list-style: none;
+}
+#game-picker li { margin: 0; }
+#game-picker ul:empty { display: none; }
+#game-picker .game-picker-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-block-size: 44px;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+#game-picker img { flex: none; }
+#game-picker :is(a, button):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -3px;
+}

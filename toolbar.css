@@ -47,7 +47,8 @@ body .game-toolbar.toolbar-new-icon #new-game {
   height: 44px;
   padding: 0;
 }
-body .game-toolbar.toolbar-compact .game-tools .toolbar-label,
+body .game-toolbar.toolbar-compact .game-tools :not(#game-picker-button) > .toolbar-label,
+body .game-toolbar.toolbar-picker-icon #game-picker-button .toolbar-label,
 body .game-toolbar.toolbar-new-icon #new-game .toolbar-label { display: none; }
 body .game-toolbar.toolbar-compact .game-tools .toolbar-icon,
 body .game-toolbar.toolbar-new-icon #new-game .toolbar-icon { display: inline; }
@@ -218,3 +219,9 @@ body.table-only.landscape-controls .game .move-feedback { grid-area: 3 / 2 / 4 /
 body.table-only.landscape-controls .game .play-dock { grid-area: 4 / 2 / 5 / -1; }
 body.table-only.landscape-controls .game .pool-tray { grid-area: 4 / 3; }
 body.table-only.landscape-controls .game-column:has(.pool-above) .pool-tray { grid-row: 1; }
+
+body .game-toolbar.toolbar-picker-icon #game-picker-button {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+}
