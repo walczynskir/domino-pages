@@ -1,0 +1,28 @@
+/* Compact progress entry adapted from Garibaldka. */
+#my-progress {
+  display: flex;
+  align-items: center;
+  gap: .65em;
+  inline-size: 100%;
+  min-block-size: 44px;
+  margin-block-end: 8px;
+  padding: .35em .7em;
+  text-align: start;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--muted);
+  border-radius: var(--radius);
+}
+#my-progress:hover { background: var(--wash); }
+#progress-name { flex: 1; min-inline-size: 0; }
+.progress-count { white-space: nowrap; }
+.progress-chevron { font-size: 1.4em; line-height: 1; }
+[dir="rtl"] .progress-chevron { transform: scaleX(-1); }
+.table-only #my-progress { display: none; }
+#progress-dialog { max-block-size: min(85vh, calc(100dvh - 24px)); }
+.progress-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.progress-heading h2 { margin: 0; }
+#progress-close { min-block-size: 44px; min-inline-size: 44px; padding: 0; font-size: 1.35em; }
+#progress-metrics { margin-block-start: .7em; }
+#progress-metrics .stat { gap: .5em; font-size: inherit; }
+#progress-badges h3 { margin-block: .7em 0; }

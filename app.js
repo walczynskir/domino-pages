@@ -93,7 +93,7 @@
     document.documentElement.lang = prefs.language;
     document.documentElement.dataset.theme = prefs.theme;
     document.body.classList.toggle('large', prefs.large);
-    const map = { 'language-label':'language','theme-label':'theme','new-game':'new','you-label':'you','computer-label':'computer',target:'target','hand-label':'hand',draw:'draw','progress-label':'progress','progress-title':'progressTitle','progress-text':'progressText','wins-label':'wins','matches-label':'matches','match-points-label':'matchPoints','local-note':'local','save-note':'save','settings-title':'settings','starter-label':'starter','alternate-option':'alternate','winner-option':'winner','tie-note':'tie','large-label':'large','progress-toggle-label':'progressToggle','setting-note':'settingNote','confirm-title':'confirm','confirm-text':'confirmText',cancel:'cancel','confirm-new':'new' };
+    const map = { 'language-label':'language','theme-label':'theme','new-game':'new','you-label':'you','computer-label':'computer',target:'target','hand-label':'hand',draw:'draw','wins-label':'wins','matches-label':'matches','match-points-label':'matchPoints','local-note':'local','save-note':'save','settings-title':'settings','starter-label':'starter','alternate-option':'alternate','winner-option':'winner','tie-note':'tie','large-label':'large','progress-toggle-label':'progressToggle','setting-note':'settingNote','confirm-title':'confirm','confirm-text':'confirmText',cancel:'cancel','confirm-new':'new' };
     for (const [id, name] of Object.entries(map)) $(id).textContent = tr(name);
     document.querySelector('.board-zoom-controls').setAttribute('aria-label',prefs.language==='pl'?'Powiększenie planszy':'Board zoom');
     $('table').setAttribute('aria-label',prefs.language==='pl'?'Plansza domino':'Domino board');
@@ -157,7 +157,7 @@
     $('history-title').textContent = prefs.language === 'pl' ? 'Historia rozgrywki' : 'Game history';
     $('history-note').textContent = prefs.language === 'pl' ? 'Jawne ruchy i liczba dobranych kości. Najnowsze zdarzenia na górze.' : 'Public moves and draw counts. Latest events first.';
     $('starter').value = prefs.starter; $('large').checked = prefs.large; $('progress-toggle').checked = prefs.progress;
-    $('progress-label').closest('section').hidden = !prefs.progress;
+    $('my-progress').hidden = !prefs.progress;
   }
   function drawBoard() {
     const board = $('board'); board.replaceChildren();
@@ -349,6 +349,33 @@
     for(let i=0;i<rows;i++){const row=document.createElement('div');row.className=id==='opponent-hand'?'opponent-row':'player-row';const count=base+(i<extra?1:0);row.append(...tiles.slice(offset,offset+count));offset+=count;fragment.append(row);}
     hand.replaceChildren(fragment);
   }
+  function renderProgress() {
+    const text = value => DominoI18n.text(value, prefs.language);
+    const number = new Intl.NumberFormat(prefs.language);
+    const wins = number.format(stats.wins);
+    $('progress-name').textContent = text('My progress');
+    $('progress-wins').textContent = $('wins').textContent = wins;
+    $('matches').textContent = number.format(stats.matches);
+    $('match-points').textContent = number.format(stats.points);
+
+    const reward = rewardThemes.find(theme => !themeAvailable(theme.value));
+    $('progress-next').hidden = $('progress-reward-detail').hidden = !reward;
+    const label = [text('My progress'), text('Games won') + ': ' + wins];
+    if (reward) {
+      const count = number.format(stats.completedMatches) + '/' + number.format(reward.matches);
+      const detail = text('Next reward') + ': ' + text(reward.name) + ' · ' + count + ' · ' + text('Completed games');
+      $('progress-next-count').textContent = count;
+      $('progress-reward-detail').textContent = detail;
+      label.push(detail);
+    }
+    $('my-progress').setAttribute('aria-label', label.join(' · '));
+    $('badges').replaceChildren(...[[stats.wins>=1||stats.achievements?.includes('badgeFirst'),'badgeFirst'],[stats.wins>=5||stats.achievements?.includes('badgeFive'),'badgeFive'],[stats.completedMatches>=10||stats.achievements?.includes('badgeTen'),'badgeTen']].filter(([ok])=>ok).map(([,label])=>{const badge=document.createElement('span');badge.className='badge';badge.textContent=tr(label);return badge;}));
+    $('progress-badges').hidden = !$('badges').childElementCount;
+  }
+
+  $('my-progress').onclick = () => $('progress-dialog').showModal();
+  $('progress-dialog').addEventListener('close', () => $('my-progress').focus());
+
   function render() {
     const poolTray = document.querySelector('.pool-tray');
     const computerSide = state.roundStarter === 0;
@@ -437,8 +464,8 @@
     $('match-total').textContent = prefs.language === 'pl' ? `Partie · Ty ${stats.points} : ${stats.opponentPoints} Komputer` : `Games · You ${stats.points} : ${stats.opponentPoints} Computer`;
     const gamesLabel = prefs.language === 'pl' ? 'Partie' : 'Games';
     $('match-total-compact').textContent = `${gamesLabel} ${stats.points}:${stats.opponentPoints}`;
-    $('wins').textContent = stats.wins; $('matches').textContent = stats.matches; $('match-points').textContent = stats.points;
-    $('badges').replaceChildren(...[[stats.wins>=1||stats.achievements?.includes('badgeFirst'),'badgeFirst'],[stats.wins>=5||stats.achievements?.includes('badgeFive'),'badgeFive'],[stats.completedMatches>=10||stats.achievements?.includes('badgeTen'),'badgeTen']].filter(([ok])=>ok).map(([,label])=>{const badge=document.createElement('span');badge.className='badge';badge.textContent=tr(label);return badge;}));
+    renderProgress();
+
     save(); if (storageProblem) $('save-note').textContent=tr('storage');
     DominoI18n.apply(document.body,prefs.language);
     renderToolbar();

@@ -25,6 +25,10 @@
     "zh-Hans": "简体中文"
   },
   "catalog": {
+    "My progress": ["Moje postępy", "My progress", "Mi progreso", "Mein Fortschritt", "我的进度", "मेरी प्रगति", "Ma progression", "تقدّمي", "I miei progressi", "Мій прогрес"],
+    "Next reward": ["Następna nagroda", "Next reward", "Próxima recompensa", "Nächste Belohnung", "下一项奖励", "अगला इनाम", "Prochaine récompense", "المكافأة التالية", "Prossima ricompensa", "Наступна нагорода"],
+    "Completed games": ["Ukończone partie", "Completed games", "Partidas completadas", "Abgeschlossene Partien", "已完成的对局", "पूरे हुए खेल", "Parties terminées", "المباريات المكتملة", "Partite completate", "Завершені партії"],
+    "Badges": ["Odznaki", "Badges", "Insignias", "Abzeichen", "徽章", "बैज", "Badges", "الشارات", "Distintivi", "Відзнаки"],
     "Undo": ["Cofnij", "Undo", "Deshacer", "Rückgängig", "撤销", "पूर्ववत करें", "Annuler", "تراجع", "Annulla", "Скасувати"],
     "Redo": ["Przywróć", "Redo", "Rehacer", "Wiederholen", "重做", "फिर करें", "Rétablir", "إعادة", "Ripristina", "Повторити"],
     "Undo and Redo": ["Cofnij i Przywróć", "Undo and Redo", "Deshacer y Rehacer", "Rückgängig und Wiederholen", "撤销和重做", "पूर्ववत और फिर करें", "Annuler et Rétablir", "التراجع والإعادة", "Annulla e Ripristina", "Скасувати та Повторити"],
