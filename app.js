@@ -484,7 +484,7 @@
     renderBackup();
     const copy = settingsDialogStrings[prefs.language] || settingsDialogStrings.en;
     $('settings-autosave').textContent = copy.autosave;
-    $('settings-group-0').textContent = tr('computer');
+    $('settings-group-0').textContent = DominoI18n.text('Computer', prefs.language);
     $('settings-group-1').textContent = copy.rules;
     $('settings-group-2').textContent = copy.display;
     const close = DominoI18n.text('Close', prefs.language);
@@ -600,7 +600,7 @@
       $(id).disabled = !entries.length;
     }
     $('undo-enabled').checked = !!prefs.undoEnabled;
-    toolbarButton('new-game', '+', prefs.language === 'pl' ? 'Nowa gra' : tr('new'));
+    toolbarButton('new-game', '+', DominoI18n.text('New game', prefs.language));
     toolbarButton('help-button', '?', $('help-button').textContent);
     $('fullscreen-history').textContent = '☰';
     $('fullscreen-history').setAttribute('aria-label', DominoI18n.text('Game history', prefs.language));

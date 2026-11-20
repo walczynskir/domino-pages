@@ -12,14 +12,14 @@
   const labels = {
     pl: ['Inne gry', 'Zamknij', 'Ostatnio otwierane', 'Wszystkie gry', 'Osiem Asów', 'Garibaldka'],
     en: ['Other games', 'Close', 'Recently opened', 'All games', 'Eight Aces', 'Russian Bank'],
-    de: ['Andere Spiele', 'Schließen', 'Zuletzt geöffnet', 'Alle Spiele', 'Acht Asse', 'Russische Bank'],
-    es: ['Otros juegos', 'Cerrar', 'Abiertos recientemente', 'Todos los juegos', 'Ocho ases', 'Banco ruso'],
+    de: ['Andere Spiele', 'Schließen', 'Zuletzt geöffnet', 'Alle Spiele', 'Acht Asse', 'Streitpatience'],
+    es: ['Otros juegos', 'Cerrar', 'Abiertos recientemente', 'Todos los juegos', 'Ocho ases', 'Crapé'],
     fr: ['Autres jeux', 'Fermer', 'Ouverts récemment', 'Tous les jeux', 'Huit as', 'Crapette'],
-    it: ['Altri giochi', 'Chiudi', 'Aperti di recente', 'Tutti i giochi', 'Otto assi', 'Garibaldina'],
-    ar: ['ألعاب أخرى', 'إغلاق', 'فُتحت مؤخرًا', 'كل الألعاب', 'ثمانية آسات', 'البنك الروسي'],
-    hi: ['अन्य खेल', 'बंद करें', 'हाल में खोले गए', 'सभी खेल', 'आठ इक्के', 'रूसी बैंक'],
+    it: ['Altri giochi', 'Chiudi', 'Aperti di recente', 'Tutti i giochi', 'Otto assi', 'Crapette'],
+    ar: ['ألعاب أخرى', 'إغلاق', 'فُتحت مؤخرًا', 'كل الألعاب', 'ثمانية آسات', 'طنج'],
+    hi: ['अन्य खेल', 'बंद करें', 'हाल में खोले गए', 'सभी खेल', 'आठ इक्के', 'दो खिलाड़ियों का सॉलिटेयर'],
     uk: ['Інші ігри', 'Закрити', 'Нещодавно відкриті', 'Усі ігри', 'Вісім тузів', 'Гарібальдка'],
-    zh: ['其他游戏', '关闭', '最近打开', '所有游戏', '八张A', '俄罗斯银行']
+    zh: ['其他游戏', '关闭', '最近打开', '所有游戏', '八张王牌', '双人接龙']
   };
   const key = 'games-chest-recent';
   const catalogUrl = new URL('games-chest/games.json', document.currentScript.src);
