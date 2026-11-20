@@ -1,7 +1,8 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.12.0';
+const cacheName = cachePrefix + '1.12.1';
 const scope = self.registration.scope;
 const assetNames = [
+  "statistics-reset.js",
   'progress.css', 'shared-preferences.js', 'shared-progress-backup.js', 'progress-backup.js', 'preferences-strings.js',
   'app.js', 'apple-touch-icon.png', 'board-view.js', 'credits.html',
   'credits.js', 'engine.js', 'favicon.ico', 'favicon.svg',

@@ -349,14 +349,25 @@
     for(let i=0;i<rows;i++){const row=document.createElement('div');row.className=id==='opponent-hand'?'opponent-row':'player-row';const count=base+(i<extra?1:0);row.append(...tiles.slice(offset,offset+count));offset+=count;fragment.append(row);}
     hand.replaceChildren(fragment);
   }
+  function renderMatchTotals() {
+    const matchPoints = statisticsReset.count('points', stats.points);
+    const opponentPoints = statisticsReset.count('opponentPoints', stats.opponentPoints);
+    $('match-total').textContent = prefs.language === 'pl' ? `Partie · Ty ${matchPoints} : ${opponentPoints} Komputer` : `Games · You ${matchPoints} : ${opponentPoints} Computer`;
+    const gamesLabel = prefs.language === 'pl' ? 'Partie' : 'Games';
+    $('match-total-compact').textContent = `${gamesLabel} ${matchPoints}:${opponentPoints}`;
+  }
+
+  const statisticsReset = createStatisticsReset('domino-statistics-baseline-v1', '#progress-dialog',
+    () => ({ wins: stats.wins, matches: stats.matches, points: stats.points, opponentPoints: stats.opponentPoints }), () => { renderMatchTotals(); renderProgress(); });
+
   function renderProgress() {
     const text = value => DominoI18n.text(value, prefs.language);
     const number = new Intl.NumberFormat(prefs.language);
-    const wins = number.format(stats.wins);
+    const wins = number.format(statisticsReset.count('wins', stats.wins));
     $('progress-name').textContent = text('My progress');
     $('progress-wins').textContent = $('wins').textContent = wins;
-    $('matches').textContent = number.format(stats.matches);
-    $('match-points').textContent = number.format(stats.points);
+    $('matches').textContent = number.format(statisticsReset.count('matches', stats.matches));
+    $('match-points').textContent = number.format(statisticsReset.count('points', stats.points));
 
     const reward = rewardThemes.find(theme => !themeAvailable(theme.value));
     $('progress-next').hidden = $('progress-reward-detail').hidden = !reward;
@@ -461,9 +472,7 @@
 
     $('continue').hidden = !state.roundResult && state.matchWinner === null;
     $('continue').textContent = tr(state.matchWinner !== null ? 'nextMatch':'continue');
-    $('match-total').textContent = prefs.language === 'pl' ? `Partie · Ty ${stats.points} : ${stats.opponentPoints} Komputer` : `Games · You ${stats.points} : ${stats.opponentPoints} Computer`;
-    const gamesLabel = prefs.language === 'pl' ? 'Partie' : 'Games';
-    $('match-total-compact').textContent = `${gamesLabel} ${stats.points}:${stats.opponentPoints}`;
+    renderMatchTotals();
     renderProgress();
 
     save(); if (storageProblem) $('save-note').textContent=tr('storage');
