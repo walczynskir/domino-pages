@@ -1,5 +1,5 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.12.2';
+const cacheName = cachePrefix + '1.12.3';
 const scope = self.registration.scope;
 const assetNames = [
   "statistics-reset.js",

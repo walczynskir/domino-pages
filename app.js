@@ -452,8 +452,10 @@
     if (last) {
       const player = tr(last.player === 0 ? 'you' : 'computer');
       const prefix = prefs.language === 'pl' ? 'Ostatnie dołożenie' : 'Last tile played';
-      const points = last.missedPoints ? (prefs.language === 'pl' ? `brak meldunku — utracone ${last.missedPoints} pkt` : `not declared — ${last.missedPoints} points lost`) : last.points ? `+${last.points} ${tr('score')}` : (prefs.language === 'pl' ? 'bez punktów' : 'no points');
-      $('last-move').textContent = `${prefix}: ${player} · ${last.id.replace('-', '–')} · ${points}.`;
+      const scoreUnit = DominoI18n.text('pts', prefs.language);
+      const points = last.missedPoints ? (prefs.language === 'pl' ? `brak meldunku — utracone ${last.missedPoints} pkt` : `not declared — ${last.missedPoints} points lost`) : last.points ? `+${last.points} ${scoreUnit}` : (prefs.language === 'pl' ? 'bez punktów' : 'no points');
+      const punctuation = points.endsWith('.') ? '' : '.';
+      $('last-move').textContent = `${prefix}: ${player} · ${last.id.replace('-', '–')} · ${points}${punctuation}`;
     }
     const lastHumanMove = state.events.findLast(event => event.id && event.player === 0);
     $('declaration-feedback').hidden = !lastHumanMove?.missedPoints;
@@ -465,8 +467,7 @@
     }
     $('status').textContent = message;
     $('draw').disabled = !active || moves.length > 0;
-    $('draw').textContent = state.pool.length > 2 ? (prefs.language === 'pl' ? (state.drawnThisTurn === 1 ? 'Dobierz drugą kość' : 'Dobierz kość') : (state.drawnThisTurn === 1 ? 'Draw second tile' : 'Draw tile')) : 'Pas';
-    if (prefs.language === 'en' && state.pool.length <= 2) $('draw').textContent = 'Pass';
+    $('draw').textContent = state.pool.length > 2 ? (prefs.language === 'pl' ? (state.drawnThisTurn === 1 ? 'Dobierz drugą kość' : 'Dobierz kość') : (state.drawnThisTurn === 1 ? 'Draw second tile' : 'Draw tile')) : (prefs.language === 'pl' ? 'Pas' : 'Pass');
     $('optional-pass').hidden = !active || moves.length > 0 || state.pool.length <= 2 || state.settings.mustDraw !== false;
     $('optional-pass').textContent = prefs.language === 'pl' ? 'Pas bez dobierania' : 'Pass without drawing';
 
