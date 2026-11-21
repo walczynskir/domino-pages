@@ -12,6 +12,10 @@ window.createStatisticsReset = (key, containerSelector, snapshot, refresh) => {
     hi: ['आँकड़े रीसेट करें', 'दिख रहे आँकड़े रीसेट करें? मौजूदा खेल और इनाम सुरक्षित रहेंगे।', 'आँकड़े रीसेट हो गए।', 'आँकड़े रीसेट नहीं हो सके।', 'दर्ज खेल'],
     'zh-Hans': ['重置统计', '重置显示的统计数据？当前对局和奖励会保留。', '统计已重置。', '无法重置统计。', '已记录对局']
   };
+  const cancelCopy = {
+    pl: 'Anuluj', en: 'Cancel', de: 'Abbrechen', es: 'Cancelar', fr: 'Annuler',
+    it: 'Annulla', uk: 'Скасувати', ar: 'إلغاء', hi: 'रद्द करें', 'zh-Hans': '取消'
+  };
   const labels = () => copy[document.documentElement.lang] ?? copy.en;
   const read = () => {
     try {
@@ -34,14 +38,44 @@ window.createStatisticsReset = (key, containerSelector, snapshot, refresh) => {
   action.append(button);
   section.append(action, message);
   container.append(section);
-  const update = () => { button.textContent = labels()[0]; };
+
+  const confirmation = document.createElement('dialog');
+  const title = document.createElement('h2');
+  const description = document.createElement('p');
+  const actions = document.createElement('div');
+  const cancel = document.createElement('button');
+  const accept = document.createElement('button');
+  confirmation.translate = false;
+  title.id = 'reset-statistics-title';
+  description.id = 'reset-statistics-description';
+  confirmation.setAttribute('aria-labelledby', title.id);
+  confirmation.setAttribute('aria-describedby', description.id);
+  actions.style.display = 'flex';
+  actions.style.flexWrap = 'wrap';
+  actions.style.gap = '0.5rem';
+  cancel.type = accept.type = 'button';
+  cancel.autofocus = true;
+  accept.className = 'primary';
+  actions.append(cancel, accept);
+  confirmation.append(title, description, actions);
+  dialog.append(confirmation);
+
+  const update = () => {
+    const [label, warning] = labels();
+    button.textContent = title.textContent = accept.textContent = label;
+    description.textContent = warning;
+    cancel.textContent = cancelCopy[document.documentElement.lang] ?? cancelCopy.en;
+  };
   new MutationObserver(update).observe(document.documentElement, {
     attributes: true, attributeFilter: ['lang']
   });
   update();
-  button.onclick = () => {
-    const [, prompt, success, error] = labels();
-    if (!window.confirm(prompt)) return;
+  button.onclick = () => confirmation.showModal();
+  cancel.onclick = () => confirmation.close();
+  accept.onclick = () => {
+    if (!confirmation.open) return;
+    confirmation.close();
+    const [, , success, error] = labels();
     try {
       const next = snapshot();
       localStorage.setItem(key, JSON.stringify(next));
@@ -55,7 +89,10 @@ window.createStatisticsReset = (key, containerSelector, snapshot, refresh) => {
     message.textContent = success;
     message.hidden = false;
   };
-  dialog.addEventListener('close', () => { message.hidden = true; });
+  dialog.addEventListener('close', () => {
+    if (confirmation.open) confirmation.close();
+    message.hidden = true;
+  });
   window.addEventListener('storage', event => {
     if (event.key !== key && event.key !== null) return;
     baseline = read();
