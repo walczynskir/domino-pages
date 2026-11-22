@@ -31,8 +31,10 @@ html .game-footer .support-causes p { margin: 6px 0; max-inline-size: 75ch; }
 html .game-footer .support-links {
   display: flex;
   flex-wrap: wrap;
+  justify-content: left;
   gap: 0 24px;
   margin: 6px 0;
+  text-align: left;
 }
 html .game-footer :is(.support-links a, .footer-details a) {
   display: inline-flex;
@@ -52,13 +54,17 @@ html .game-footer .support-causes .support-note {
   font-size: .8rem;
 }
 .game-footer .footer-details {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  direction: ltr;
   align-items: center;
   gap: 0 14px;
   margin-block-start: 4px;
 }
-.game-footer .footer-details #save-note { margin-inline-start: auto; }
+.game-footer .footer-details > a { justify-self: start; }
+.game-footer .footer-details > [id$="-version"] { justify-self: end; }
+.game-footer .footer-details > #save-note { grid-column: 1 / -1; }
+html[dir="rtl"] .game-footer .footer-details > :is(a, #save-note) { direction: rtl; }
 .game-footer #save-note:empty { display: none; }
 html.larger .game-footer, html .large .game-footer { font-size: 1rem; }
 html.larger .game-footer .support-causes h2, html .large .game-footer .support-causes h2 { font-size: 1.15rem; }
