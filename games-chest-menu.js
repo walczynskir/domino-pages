@@ -8,7 +8,7 @@
   const close = document.querySelector('#game-picker-close');
   const pickerRecent = picker.querySelector('#game-picker-recent');
   const list = picker.querySelector('#game-picker-list');
-  const allLinks = [menu, picker].map(container => container.querySelector('.all-games'));
+  const allGamesLink = picker.querySelector('.all-games');
   const labels = {
     pl: ['Inne gry', 'Zamknij', 'Ostatnio otwierane', 'Wszystkie gry', 'Osiem Asów', 'Garibaldka'],
     en: ['Other games', 'Close', 'Recently opened', 'All games', 'Eight Aces', 'Russian Bank'],
@@ -72,7 +72,7 @@
     picker.querySelector('h2').textContent = title;
     pickerRecent.querySelector('h3').textContent = recentTitle;
     recent.querySelector('span').textContent = recentTitle;
-    for (const link of allLinks) link.textContent = allGames;
+    allGamesLink.textContent = allGames;
 
     const otherGames = catalog.filter(game => game.id !== current);
     const recentGames = ids.map(id => otherGames.find(game => game.id === id)).filter(Boolean);

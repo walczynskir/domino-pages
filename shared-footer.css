@@ -1,0 +1,71 @@
+html .game-footer {
+  box-sizing: border-box;
+  display: grid;
+  justify-items: stretch;
+  align-items: start;
+  gap: 0;
+  max-inline-size: 1200px;
+  margin: 20px auto 0;
+  padding: 16px clamp(12px, 3vw, 24px) 24px;
+  border-block-start: 1px solid var(--line, #b9c8bc);
+  color: var(--ink, #253b30);
+  font: 400 .85rem/1.6 system-ui, sans-serif;
+  text-align: start;
+}
+html .game-footer .support-causes {
+  box-sizing: border-box;
+  inline-size: 100%;
+  margin: 0;
+  padding: 0 0 12px;
+  border-block-end: 1px solid var(--line, #b9c8bc);
+  color: inherit;
+  font: inherit;
+  text-align: start;
+}
+html .game-footer .support-causes h2 {
+  margin: 0 0 6px;
+  font: 650 1rem/1.4 system-ui, sans-serif;
+  letter-spacing: normal;
+}
+html .game-footer .support-causes p { margin: 6px 0; max-inline-size: 75ch; }
+html .game-footer .support-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  margin: 6px 0;
+}
+html .game-footer :is(.support-links a, .footer-details a) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 44px;
+  max-inline-size: 100%;
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+html .game-footer .support-links a span { display: inline; overflow-wrap: anywhere; }
+html .game-footer .support-links b { flex: none; font-weight: 400; }
+html .game-footer .support-causes .support-note {
+  color: var(--muted, var(--palette-muted, #4a5b53));
+  font-size: .8rem;
+}
+.game-footer .footer-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 14px;
+  margin-block-start: 4px;
+}
+.game-footer .footer-details #save-note { margin-inline-start: auto; }
+.game-footer #save-note:empty { display: none; }
+html .game-footer .games-chest-menu { margin: 4px 0 0; }
+.game-footer .games-chest-menu:not(:has(.recent-games:not([hidden]))) { display: none; }
+html.larger .game-footer, html .large .game-footer { font-size: 1rem; }
+html.larger .game-footer .support-causes h2, html .large .game-footer .support-causes h2 { font-size: 1.15rem; }
+html.larger .game-footer .support-causes .support-note, html .large .game-footer .support-causes .support-note { font-size: .9rem; }
+
+@media (max-width: 540px) {
+  html .game-footer .support-links { gap: 8px 16px; }
+}

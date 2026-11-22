@@ -1,7 +1,9 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.12.6';
+const cacheName = cachePrefix + '1.12.7';
 const scope = self.registration.scope;
 const assetNames = [
+  "shared-footer.css",
+  "shared-footer.js",
   "games-chest/domino-icon.png",
 
   "statistics-reset.js",
