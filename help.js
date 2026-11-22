@@ -51,6 +51,11 @@
     dialog.querySelector('#demo-prev').onclick=()=>{stop();step=Math.max(0,step-1);draw();};
     dialog.querySelector('#demo-next').onclick=()=>{stop();step=Math.min(4,step+1);draw();};
     dialog.onclose=()=>{stop();closed?.();};
+    const saveHelp=document.createElement('p');
+    saveHelp.setAttribute('data-save-help','');
+    saveHelp.setAttribute('translate','no');
+    dialog.append(saveHelp);
+    globalThis.renderGameSaveHelp?.(dialog);
     dialog.showModal();
     draw(); // Let the player read the goal before starting the demonstration.
   }

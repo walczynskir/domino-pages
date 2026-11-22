@@ -93,7 +93,7 @@
     document.documentElement.lang = prefs.language;
     document.documentElement.dataset.theme = prefs.theme;
     document.body.classList.toggle('large', prefs.large);
-    const map = { 'language-label':'language','theme-label':'theme','new-game':'new','you-label':'you','computer-label':'computer',target:'target','hand-label':'hand',draw:'draw','wins-label':'wins','matches-label':'matches','match-points-label':'matchPoints','local-note':'local','save-note':'save','settings-title':'settings','starter-label':'starter','alternate-option':'alternate','winner-option':'winner','tie-note':'tie','large-label':'large','progress-toggle-label':'progressToggle','setting-note':'settingNote','confirm-title':'confirm','confirm-text':'confirmText',cancel:'cancel','confirm-new':'new' };
+    const map = { 'language-label':'language','theme-label':'theme','new-game':'new','you-label':'you','computer-label':'computer',target:'target','hand-label':'hand',draw:'draw','wins-label':'wins','matches-label':'matches','match-points-label':'matchPoints','local-note':'local','settings-title':'settings','starter-label':'starter','alternate-option':'alternate','winner-option':'winner','tie-note':'tie','large-label':'large','progress-toggle-label':'progressToggle','setting-note':'settingNote','confirm-title':'confirm','confirm-text':'confirmText',cancel:'cancel','confirm-new':'new' };
     for (const [id, name] of Object.entries(map)) $(id).textContent = tr(name);
     document.querySelector('.board-zoom-controls').setAttribute('aria-label',prefs.language==='pl'?'Powiększenie planszy':'Board zoom');
     $('table').setAttribute('aria-label',prefs.language==='pl'?'Plansza domino':'Domino board');
@@ -477,8 +477,7 @@
     renderProgress();
 
     save();
-    $('save-note').dataset.saved = String(!storageProblem);
-    if (storageProblem) $('save-note').textContent=tr('storage');
+    $('save-note').textContent = storageProblem ? tr('storage') : '';
     DominoI18n.apply(document.body,prefs.language);
     renderToolbar();
     renderSettings();

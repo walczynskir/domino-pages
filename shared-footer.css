@@ -59,7 +59,7 @@ html .game-footer .support-causes .support-note {
   margin-block-start: 4px;
 }
 .game-footer .footer-details #save-note { margin-inline-start: auto; }
-.game-footer #save-note:empty, .game-footer .save-note-short { display: none; }
+.game-footer #save-note:empty { display: none; }
 html .game-footer .games-chest-menu { margin: 4px 0 0; }
 .game-footer .games-chest-menu:not(:has(.recent-games:not([hidden]))) { display: none; }
 html.larger .game-footer, html .large .game-footer { font-size: 1rem; }
@@ -75,20 +75,8 @@ html.larger .game-footer .support-causes .support-note, html .large .game-footer
     column-gap: 8px;
     font-size: .75rem;
   }
-  .game-footer .footer-details > :is(a, [id$="-version"], .save-note-short) {
+  .game-footer .footer-details > :is(a, [id$="-version"]) {
     white-space: nowrap;
-  }
-  .game-footer #save-note[data-saved="true"] {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-  .game-footer #save-note[data-saved="true"] + .save-note-short {
-    display: inline;
-    margin-inline-start: auto;
   }
   html.larger .game-footer .footer-details, html .large .game-footer .footer-details {
     font-size: min(.82rem, 3.75vw);
