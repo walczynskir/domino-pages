@@ -476,7 +476,9 @@
     renderMatchTotals();
     renderProgress();
 
-    save(); if (storageProblem) $('save-note').textContent=tr('storage');
+    save();
+    $('save-note').dataset.saved = String(!storageProblem);
+    if (storageProblem) $('save-note').textContent=tr('storage');
     DominoI18n.apply(document.body,prefs.language);
     renderToolbar();
     renderSettings();
