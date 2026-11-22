@@ -33,5 +33,20 @@
     "pl": "Gomoku",
     "en": "Gomoku",
     "icon": "gomoku-icon.png"
+  },
+  {
+    "id": "kierki",
+    "url": "https://barbu.games-chest.com/",
+    "pl": "Kierki",
+    "en": "Barbu-King",
+    "es": "Barbu",
+    "de": "Barbu",
+    "zh-Hans": "凯尔基",
+    "hi": "क्येर्की",
+    "fr": "Barbu",
+    "ar": "باربو كينغ",
+    "it": "Barbu",
+    "uk": "Кєркі",
+    "icon": "kierki-icon.png"
   }
 ]

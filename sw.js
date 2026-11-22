@@ -1,5 +1,5 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.12.11';
+const cacheName = cachePrefix + '1.12.12';
 const scope = self.registration.scope;
 const assetNames = [
   "shared-footer.css",
@@ -13,6 +13,7 @@ const assetNames = [
   'undo.js', 'results.js', 'game.js', 'games-chest-menu.css', 'games-chest-menu.js', 'garden.webp',
   'games-chest/games.json', 'games-chest/sudoku-logo.svg', 'games-chest/eightaces-icon.png',
   'games-chest/garibaldka-icon.png', 'games-chest/gomoku-icon.png',
+  'games-chest/kierki-icon.png',
   'help.js', 'history.js', 'i18n.js', 'icon-192.png',
   'icon-512.png', 'icon-maskable.png', 'index.html', 'locales.js',
   'logo.png', 'favicon-16.png', 'favicon-32.png', 'logo.svg', 'manifest.webmanifest', 'settings-gear.svg', 'shared-game.css',

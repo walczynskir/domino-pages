@@ -19,7 +19,7 @@
     zh: ['其他游戏', '关闭', '最近打开', '所有游戏', '八张王牌', '双人接龙']
   };
   const key = 'games-chest-recent';
-  const catalogUrl = new URL('games-chest/games.json?v=gomoku-domain-1', document.currentScript.src);
+  const catalogUrl = new URL('games-chest/games.json?v=barbu-1', document.currentScript.src);
   const incoming = (new URLSearchParams(location.search).get('gc-recent') ?? '').split(',');
   let catalog = [];
   let ids = [];
@@ -54,7 +54,8 @@
   }
 
   function render() {
-    const language = document.documentElement.lang.split('-')[0];
+    const locale = document.documentElement.lang;
+    const language = locale.split('-')[0];
     const [title, dismiss, recentTitle, allGames, aces, bank] = labels[language] ?? labels.en;
     button.setAttribute('aria-label', title);
     button.title = title;
@@ -70,7 +71,7 @@
 
     const otherGames = catalog.filter(game => game.id !== current);
     const recentGames = ids.map(id => otherGames.find(game => game.id === id)).filter(Boolean);
-    const name = game => game[language] ??
+    const name = game => game[locale] ?? game[language] ??
       ({ 'eight-aces': aces, garibaldka: bank })[game.id] ?? game.en;
     function populate(container, games) {
       container.replaceChildren(...games.map(game => {
