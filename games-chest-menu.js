@@ -1,8 +1,5 @@
 (() => {
   const current = document.currentScript.dataset.game;
-  const menu = document.querySelector('.games-chest-menu');
-  const recent = menu.querySelector('.recent-games');
-  const icons = recent.querySelector('.recent-games-icons');
   const picker = document.querySelector('#game-picker');
   const button = document.querySelector('#game-picker-button');
   const close = document.querySelector('#game-picker-close');
@@ -33,7 +30,7 @@
       .slice(0, 4);
   }
 
-  function gameLink(game, name, iconOnly) {
+  function gameLink(game, name) {
     const link = document.createElement('a');
     const url = new URL(game.url);
     const next = history([game.id, current, ...ids]);
@@ -41,15 +38,13 @@
     link.href = url.href;
     const icon = document.createElement('img');
     icon.src = new URL(game.icon, catalogUrl).href;
-    icon.alt = iconOnly ? name : '';
+    icon.alt = '';
     icon.width = icon.height = 32;
     link.append(icon);
-    if (!iconOnly) {
-      link.className = 'game-picker-link';
-      const title = document.createElement('span');
-      title.textContent = name;
-      link.append(title);
-    }
+    link.className = 'game-picker-link';
+    const title = document.createElement('span');
+    title.textContent = name;
+    link.append(title);
     link.addEventListener('click', () => {
       ids = next;
       try { localStorage.setItem(key, JSON.stringify(ids)); } catch {}
@@ -71,7 +66,6 @@
     close.setAttribute('aria-label', dismiss);
     picker.querySelector('h2').textContent = title;
     pickerRecent.querySelector('h3').textContent = recentTitle;
-    recent.querySelector('span').textContent = recentTitle;
     allGamesLink.textContent = allGames;
 
     const otherGames = catalog.filter(game => game.id !== current);
@@ -81,14 +75,13 @@
     function populate(container, games) {
       container.replaceChildren(...games.map(game => {
         const item = document.createElement('li');
-        item.append(gameLink(game, name(game), false));
+        item.append(gameLink(game, name(game)));
         return item;
       }));
     }
     populate(pickerRecent.querySelector('ul'), recentGames);
     populate(list, otherGames.filter(game => !recentGames.includes(game)));
-    icons.replaceChildren(...recentGames.map(game => gameLink(game, name(game), true)));
-    recent.hidden = pickerRecent.hidden = recentGames.length === 0;
+    pickerRecent.hidden = recentGames.length === 0;
   }
 
   button.addEventListener('click', () => {

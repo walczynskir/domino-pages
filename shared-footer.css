@@ -60,8 +60,6 @@ html .game-footer .support-causes .support-note {
 }
 .game-footer .footer-details #save-note { margin-inline-start: auto; }
 .game-footer #save-note:empty { display: none; }
-html .game-footer .games-chest-menu { margin: 4px 0 0; }
-.game-footer .games-chest-menu:not(:has(.recent-games:not([hidden]))) { display: none; }
 html.larger .game-footer, html .large .game-footer { font-size: 1rem; }
 html.larger .game-footer .support-causes h2, html .large .game-footer .support-causes h2 { font-size: 1.15rem; }
 html.larger .game-footer .support-causes .support-note, html .large .game-footer .support-causes .support-note { font-size: .9rem; }
