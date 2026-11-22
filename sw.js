@@ -1,5 +1,5 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.12.5';
+const cacheName = cachePrefix + '1.12.6';
 const scope = self.registration.scope;
 const assetNames = [
   "games-chest/domino-icon.png",
