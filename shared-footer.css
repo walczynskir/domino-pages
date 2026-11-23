@@ -119,3 +119,26 @@ html.larger .game-footer .support-causes .support-note, html .large .game-footer
   outline: 2px solid var(--update-text);
   outline-offset: 2px;
 }
+
+.game-install:not([hidden]) {
+  box-sizing: border-box;
+  inline-size: min(720px, calc(100% - 24px));
+  margin: 4px auto;
+  text-align: end;
+}
+.game-install button {
+  min-block-size: 44px;
+  padding: 4px 10px;
+  border: 1px solid currentColor;
+  border-radius: 7px;
+  background: var(--paper, Canvas);
+  color: var(--ink, CanvasText);
+  font: inherit;
+}
+.game-install p:not([hidden]) {
+  margin-block: 4px;
+  padding: 6px 10px;
+  background: var(--paper, Canvas);
+  color: var(--ink, CanvasText);
+  text-align: start;
+}
