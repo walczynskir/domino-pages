@@ -86,3 +86,15 @@ html.larger .game-footer .support-causes .support-note, html .large .game-footer
     font-size: min(.82rem, 3.75vw);
   }
 }
+
+.game-update:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px 10px;
+  padding-block: 4px;
+  color: inherit;
+  font-size: .9em;
+}
+.game-update button { min-block-size: 44px; }
