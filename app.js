@@ -788,6 +788,7 @@
   fullscreenButton.onclick = async () => {
     if (document.body.classList.contains('table-only')) return exitTableOnly();
     tableOnly(true);
+    if (matchMedia('(display-mode: standalone)').matches || navigator.standalone === true) return;
     try {
       await document.documentElement.requestFullscreen?.();
     } catch { /* The expanded layout also works in an ordinary browser tab. */ }

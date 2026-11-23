@@ -1,5 +1,5 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.12.12';
+const cacheName = cachePrefix + '1.12.13';
 const scope = self.registration.scope;
 const assetNames = [
   "shared-footer.css",
