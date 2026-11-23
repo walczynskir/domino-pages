@@ -45,11 +45,6 @@
   border-radius: 50%;
   font-size: 1.35em;
 }
-#game-picker h3 {
-  margin: 12px 0 4px;
-  font-size: .8rem;
-  color: var(--muted, #506456);
-}
 #game-picker ul {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -90,11 +85,6 @@
   object-fit: contain;
 }
 #game-picker img[src$=".svg"] { padding: 8px; }
-#game-picker-recent img {
-  inline-size: clamp(40px, 13vw, 52px);
-  block-size: clamp(40px, 13vw, 52px);
-  border-radius: 11px;
-}
 #game-picker > .all-games {
   display: flex;
   align-items: center;

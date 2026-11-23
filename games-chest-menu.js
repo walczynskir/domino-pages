@@ -3,20 +3,19 @@
   const picker = document.querySelector('#game-picker');
   const button = document.querySelector('#game-picker-button');
   const close = document.querySelector('#game-picker-close');
-  const pickerRecent = picker.querySelector('#game-picker-recent');
   const list = picker.querySelector('#game-picker-list');
   const allGamesLink = picker.querySelector('.all-games');
   const labels = {
-    pl: ['Inne gry', 'Zamknij', 'Ostatnio otwierane', 'Wszystkie gry', 'Osiem Asów', 'Garibaldka'],
-    en: ['Other games', 'Close', 'Recently opened', 'All games', 'Eight Aces', 'Russian Bank'],
-    de: ['Andere Spiele', 'Schließen', 'Zuletzt geöffnet', 'Alle Spiele', 'Acht Asse', 'Streitpatience'],
-    es: ['Otros juegos', 'Cerrar', 'Abiertos recientemente', 'Todos los juegos', 'Ocho ases', 'Crapé'],
-    fr: ['Autres jeux', 'Fermer', 'Ouverts récemment', 'Tous les jeux', 'Huit as', 'Crapette'],
-    it: ['Altri giochi', 'Chiudi', 'Aperti di recente', 'Tutti i giochi', 'Otto assi', 'Crapette'],
-    ar: ['ألعاب أخرى', 'إغلاق', 'فُتحت مؤخرًا', 'كل الألعاب', 'ثمانية آسات', 'طنج'],
-    hi: ['अन्य खेल', 'बंद करें', 'हाल में खोले गए', 'सभी खेल', 'आठ इक्के', 'दो खिलाड़ियों का सॉलिटेयर'],
-    uk: ['Інші ігри', 'Закрити', 'Нещодавно відкриті', 'Усі ігри', 'Вісім тузів', 'Гарібальдка'],
-    zh: ['其他游戏', '关闭', '最近打开', '所有游戏', '八张王牌', '双人接龙']
+    pl: ['Inne gry', 'Zamknij', 'Wszystkie gry', 'Osiem Asów', 'Garibaldka'],
+    en: ['Other games', 'Close', 'All games', 'Eight Aces', 'Russian Bank'],
+    de: ['Andere Spiele', 'Schließen', 'Alle Spiele', 'Acht Asse', 'Streitpatience'],
+    es: ['Otros juegos', 'Cerrar', 'Todos los juegos', 'Ocho ases', 'Crapé'],
+    fr: ['Autres jeux', 'Fermer', 'Tous les jeux', 'Huit as', 'Crapette'],
+    it: ['Altri giochi', 'Chiudi', 'Tutti i giochi', 'Otto assi', 'Crapette'],
+    ar: ['ألعاب أخرى', 'إغلاق', 'كل الألعاب', 'ثمانية آسات', 'طنج'],
+    hi: ['अन्य खेल', 'बंद करें', 'सभी खेल', 'आठ इक्के', 'दो खिलाड़ियों का सॉलिटेयर'],
+    uk: ['Інші ігри', 'Закрити', 'Усі ігри', 'Вісім тузів', 'Гарібальдка'],
+    zh: ['其他游戏', '关闭', '所有游戏', '八张王牌', '双人接龙']
   };
   const key = 'games-chest-recent';
   const catalogUrl = new URL('games-chest/games.json?v=barbu-1', document.currentScript.src);
@@ -56,7 +55,7 @@
   function render() {
     const locale = document.documentElement.lang;
     const language = locale.split('-')[0];
-    const [title, dismiss, recentTitle, allGames, aces, bank] = labels[language] ?? labels.en;
+    const [title, dismiss, allGames, aces, bank] = labels[language] ?? labels.en;
     button.setAttribute('aria-label', title);
     button.title = title;
     const buttonLabel = button.querySelector('.toolbar-label');
@@ -66,23 +65,18 @@
     }
     close.setAttribute('aria-label', dismiss);
     picker.querySelector('h2').textContent = title;
-    pickerRecent.querySelector('h3').textContent = recentTitle;
     allGamesLink.textContent = allGames;
 
     const otherGames = catalog.filter(game => game.id !== current);
     const recentGames = ids.map(id => otherGames.find(game => game.id === id)).filter(Boolean);
     const name = game => game[locale] ?? game[language] ??
       ({ 'eight-aces': aces, garibaldka: bank })[game.id] ?? game.en;
-    function populate(container, games) {
-      container.replaceChildren(...games.map(game => {
-        const item = document.createElement('li');
-        item.append(gameLink(game, name(game)));
-        return item;
-      }));
-    }
-    populate(pickerRecent.querySelector('ul'), recentGames);
-    populate(list, otherGames.filter(game => !recentGames.includes(game)));
-    pickerRecent.hidden = recentGames.length === 0;
+    const orderedGames = [...recentGames, ...otherGames.filter(game => !recentGames.includes(game))];
+    list.replaceChildren(...orderedGames.map(game => {
+      const item = document.createElement('li');
+      item.append(gameLink(game, name(game)));
+      return item;
+    }));
   }
 
   button.addEventListener('click', () => {
