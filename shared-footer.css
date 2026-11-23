@@ -88,13 +88,34 @@ html.larger .game-footer .support-causes .support-note, html .large .game-footer
 }
 
 .game-update:not([hidden]) {
+  --update-background: var(--ink, #182e25);
+  --update-text: var(--paper, #fff);
+  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  gap: 4px 10px;
-  padding-block: 4px;
-  color: inherit;
-  font-size: .9em;
+  gap: 6px 12px;
+  inline-size: min(720px, calc(100% - 24px));
+  margin: 6px auto;
+  padding: 6px 10px;
+  border: 2px solid var(--update-background);
+  border-radius: 10px;
+  background: var(--update-background);
+  color: var(--update-text);
+  font-size: .95em;
+  font-weight: 750;
 }
-.game-update button { min-block-size: 44px; }
+.game-update button {
+  min-block-size: 44px;
+  padding: 4px 10px;
+  border: 2px solid var(--update-text);
+  border-radius: 7px;
+  background: var(--update-text);
+  color: var(--update-background);
+  font: inherit;
+}
+.game-update button:focus-visible {
+  outline: 2px solid var(--update-text);
+  outline-offset: 2px;
+}

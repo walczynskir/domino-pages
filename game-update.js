@@ -28,7 +28,7 @@
   const button = document.createElement('button');
   button.type = 'button';
   panel.append(status, button);
-  versionLabel.parentElement.after(panel);
+  document.querySelector('main').before(panel);
   let latest;
   let checking = false;
   let updating = false;
