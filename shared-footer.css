@@ -142,3 +142,54 @@ html.larger .game-footer .support-causes .support-note, html .large .game-footer
   color: var(--ink, CanvasText);
   text-align: start;
 }
+
+.install-guide {
+  margin-block: 8px;
+  padding: 12px;
+  border: 1px solid currentColor;
+  border-radius: 12px;
+  background: var(--paper, Canvas);
+  color: var(--ink, CanvasText);
+  text-align: start;
+}
+.install-devices:not([hidden]) { display: flex; gap: 6px; margin-block-end: 10px; }
+.install-devices button[aria-pressed="true"] {
+  color: var(--paper, Canvas);
+  background: var(--ink, CanvasText);
+  border-color: transparent;
+}
+.install-steps {
+  display: grid;
+  gap: 6px;
+  padding-inline-start: 1.6rem;
+  margin-block: 0 10px;
+}
+.install-steps li { padding-inline-start: 2px; }
+.install-symbol {
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+  min-inline-size: 1.8em;
+  min-block-size: 1.8em;
+  margin-inline-end: .45em;
+  vertical-align: middle;
+}
+.install-share-step .install-symbol::after {
+  content: "";
+  position: absolute;
+  inline-size: .76em;
+  block-size: .73em;
+  inset-block-start: .64em;
+  border: 1.5px solid currentColor;
+  border-block-start-color: transparent;
+  border-radius: 2px;
+}
+.game-install .install-guide p { padding-inline: 0; }
+.install-finish {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-block-start: 1px solid currentColor;
+  padding-block-start: 8px;
+}
+.install-finish img { border-radius: 7px; }

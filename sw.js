@@ -1,5 +1,5 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.12.17';
+const cacheName = cachePrefix + '1.12.18';
 const scope = self.registration.scope;
 const assetNames = [
   "game-update.js",
