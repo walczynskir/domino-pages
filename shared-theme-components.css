@@ -1,0 +1,186 @@
+/* Games Chest theme components. Load after the shared palette and the game's styles. */
+:root {
+  --gc-theme-header-bg: var(--palette-paper, var(--paper, #f4f4eb));
+  --gc-theme-header-ink: var(--palette-ink, var(--ink, #263b36));
+  --gc-theme-header-line: var(--palette-line, var(--line, #ccd4c8));
+  --gc-theme-header-border: 1px solid var(--gc-theme-header-line);
+  --gc-theme-header-radius: 0;
+  --gc-theme-header-padding: 12px;
+  --gc-theme-heading-font: system-ui, sans-serif;
+  --gc-theme-highlight: var(--palette-primary-bg, var(--palette-accent, var(--accent, #355e4c)));
+  --gc-theme-action-ink: var(--palette-primary-ink, #fff);
+  --gc-theme-action-line: var(--palette-primary-border, var(--gc-theme-highlight));
+  --gc-theme-surface: var(--palette-wash, var(--wash, #e2ead9));
+  --gc-theme-panel: color-mix(in srgb, var(--palette-accent, var(--accent, #355e4c)) 48%, #15191c);
+  --gc-theme-panel-ink: #fff;
+  --gc-theme-panel-line: color-mix(in srgb, var(--gc-theme-panel) 45%, white);
+  --gc-theme-current: var(--gc-theme-panel-line);
+}
+
+:root[data-theme="classic"] {
+  --gc-theme-header-bg: #f7f5eb;
+  --gc-theme-header-ink: #182d20;
+  --gc-theme-header-line: #acbeae;
+  --gc-theme-highlight: #225e3b;
+  --gc-theme-surface: radial-gradient(ellipse at 50% 38%, #287846, #125032 78%);
+  --gc-theme-panel: #123328;
+}
+:root[data-theme="ink"] { --gc-theme-heading-font: Georgia, "Times New Roman", serif; }
+:root:is([data-theme="studio"], [data-theme="forma"], [data-theme="energy"], [data-theme="tangerine"], [data-theme="porcelain"], [data-theme="ukraine"], [data-theme="aurora"], [data-theme="crown"], [data-theme="obsidian"]) {
+  --gc-theme-heading-font: Arial, Helvetica, sans-serif;
+}
+:root:is([data-theme="energy"], [data-theme="tangerine"], [data-theme="porcelain"], [data-theme="ukraine"], [data-theme="aurora"]) {
+  --gc-theme-header-radius: 0 0 26px 26px;
+  --gc-theme-header-padding: 20px;
+}
+:root[data-theme="energy"] {
+  --gc-theme-header-bg: linear-gradient(110deg, #7134cf, #a42ba8 65%, #c7288b);
+  --gc-theme-header-ink: #fff;
+  --gc-theme-header-border: 0;
+}
+:root[data-theme="tangerine"] {
+  --gc-theme-header-bg: #ffab00;
+  --gc-theme-header-ink: #30291f;
+  --gc-theme-header-border: 0;
+}
+/* Ukraine's header and main action follow the Eight Aces reference. */
+:root[data-theme="ukraine"] {
+  --gc-theme-header-bg: var(--palette-accent);
+  --gc-theme-header-ink: #fff;
+  --gc-theme-header-border: 8px solid var(--gc-theme-highlight);
+  --gc-theme-panel: var(--palette-ink);
+  --gc-theme-panel-line: var(--palette-accent);
+  --gc-theme-current: var(--gc-theme-highlight);
+}
+:root[data-theme="tropics"] {
+  --gc-theme-header-bg: #f3f4eb;
+  --gc-theme-header-ink: #152f42;
+  --gc-theme-header-line: #9eb6bf;
+  --gc-theme-highlight: #184e77;
+  --gc-theme-panel: #183650;
+}
+:root[data-theme="beach"] {
+  --gc-theme-header-bg: #f7f2e7;
+  --gc-theme-header-ink: #12363f;
+  --gc-theme-header-line: #9eaeb0;
+  --gc-theme-highlight: #07586a;
+  --gc-theme-panel: #15424b;
+}
+:root[data-theme="aurora"] {
+  --gc-theme-header-bg: #66509a;
+  --gc-theme-header-ink: #fff;
+  --gc-theme-header-border: 0;
+  --gc-theme-highlight: #66509a;
+}
+:root[data-theme="obsidian"] {
+  --gc-theme-header-bg: #21232d;
+  --gc-theme-header-ink: #fff;
+  --gc-theme-highlight: #474159;
+}
+:root[data-theme="crown"] {
+  --gc-theme-header-bg: #f0e3ba;
+  --gc-theme-header-ink: #3a2b19;
+  --gc-theme-highlight: #705024;
+}
+:root[data-theme="contrast"] {
+  --gc-theme-header-bg: #fff;
+  --gc-theme-header-ink: #111;
+  --gc-theme-header-line: #111;
+  --gc-theme-surface: #fff;
+  --gc-theme-panel: #111;
+  --gc-theme-panel-line: #fff;
+  --gc-theme-current: #111;
+  --gc-theme-highlight: #111;
+  --gc-theme-action-ink: #fff;
+}
+
+/* These aliases distinguish illustrated rewards from similarly named solid palettes. */
+:root:is([data-theme="garden"], [data-scenery="garden"], [data-scenic-reward="garden"]) { --gc-scene-image: url("garden.webp"); }
+:root:is([data-scenery="tropics"], [data-scenic-reward="tropics"]) { --gc-scene-image: url("tropics.webp"); }
+:root:is([data-scenery="beach"], [data-scenic-reward="beach"]) { --gc-scene-image: url("beach.webp"); }
+:root:is([data-scenery="orange-grove"], [data-scenic-reward="orange-grove"], [data-illustration="orange-grove"]) {
+  --gc-scene-image: url("orange-grove.webp");
+  --gc-theme-panel: #123328;
+  --gc-theme-current: #f7db86;
+}
+:root:is([data-scenery="copper"], [data-scenic-reward="copper"], [data-illustration="copper"]) {
+  --gc-scene-image: url("copper-table.webp");
+  --gc-scene-portrait: url("copper-portrait.webp");
+}
+:root:is([data-scenery="starry-sky"], [data-scenery="night-sky"][data-theme="night-sky"], [data-scenic-reward="starry-sky"], [data-illustration="night-sky"]) {
+  --gc-scene-image: url("starry-sky.webp");
+  --gc-scene-portrait: url("andromeda-portrait.webp");
+}
+@media (orientation: portrait) {
+  :root { --gc-scene-display: var(--gc-scene-portrait, var(--gc-scene-image)); }
+}
+@media (orientation: landscape) {
+  :root { --gc-scene-display: var(--gc-scene-image); }
+}
+
+:root[data-theme] .gc-theme-header {
+  background: var(--gc-theme-header-bg);
+  color: var(--gc-theme-header-ink);
+  border-block-end: var(--gc-theme-header-border);
+  border-radius: var(--gc-theme-header-radius);
+  padding-block: var(--gc-theme-header-padding);
+  padding-inline: max(10px, .875rem);
+  font-family: var(--gc-theme-heading-font);
+}
+:root[data-theme] .gc-theme-header :is(h1, .brand, .accessibility-controls, .accessibility, .gc-theme-preferences) {
+  color: inherit;
+  font-family: inherit;
+}
+:root[data-theme] .gc-theme-preferences select {
+  background: var(--palette-paper, var(--paper));
+  color: var(--palette-ink, var(--ink));
+  border-color: var(--gc-theme-header-line);
+  border-radius: 12px;
+  font-weight: 600;
+}
+:root:is([data-theme="ukraine"], [data-theme="energy"], [data-theme="aurora"], [data-theme="obsidian"])
+  .gc-theme-header :is(#contrast, #contrast-toggle) {
+  color: var(--gc-theme-header-ink);
+  background: transparent;
+  border-color: #ffffff88;
+}
+:root[data-theme] .gc-theme-action {
+  background: var(--gc-theme-highlight);
+  border-color: var(--gc-theme-action-line);
+  color: var(--gc-theme-action-ink);
+}
+:root[data-theme] .gc-theme-action:hover:not(:disabled) {
+  background: var(--gc-theme-highlight);
+  color: var(--gc-theme-action-ink);
+}
+:root[data-theme] .gc-theme-table {
+  background: var(--gc-theme-surface);
+  border-color: var(--gc-theme-header-line);
+}
+:root[data-theme] .gc-theme-scene-table {
+  background: var(--gc-scene-display, var(--gc-theme-surface)) center / cover no-repeat;
+}
+:root[data-theme] .gc-theme-panel:where(:not(.finished, .pan-loser)) {
+  background: var(--gc-theme-panel);
+  color: var(--gc-theme-panel-ink);
+  border-color: var(--gc-theme-panel-line);
+}
+:root[data-theme] :is(.gc-theme-panel.current, .current .gc-theme-panel) {
+  border-color: var(--gc-theme-current);
+}
+:root[data-theme="ukraine"] :is(.gc-theme-panel.current, .current .gc-theme-panel) {
+  color: var(--gc-theme-current);
+}
+:root[data-theme="ukraine"] .gc-theme-header :is(button, select, input):focus-visible {
+  outline: 2px solid var(--gc-theme-highlight);
+  outline-offset: 2px;
+}
+@media (max-width: 600px) {
+  :root[data-theme] .gc-theme-header { padding-block: 12px; }
+}
+
+:root[data-theme="contrast"] .gc-theme-panel.current {
+  background: #fff;
+  color: #111;
+  border-color: #111;
+}

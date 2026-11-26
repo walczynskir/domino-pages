@@ -1,7 +1,8 @@
 const cachePrefix = 'domino-offline-';
-const cacheName = cachePrefix + '1.12.20';
+const cacheName = cachePrefix + '1.12.21';
 const scope = self.registration.scope;
 const assetNames = [
+  "shared-theme-components.css",
   "game-update.js",
   "game-install.js",
   "shared-footer.css",
